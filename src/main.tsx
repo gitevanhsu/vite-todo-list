@@ -1,12 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/Home";
 import TodoPage from "./pages/Todo";
-import ErrorPage from "./pages/Error";
+
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -20,7 +24,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <ErrorPage />,
+    element: <Navigate to="/vite-todo-list/" replace />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
