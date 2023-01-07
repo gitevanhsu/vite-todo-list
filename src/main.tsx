@@ -13,20 +13,25 @@ import TodoPage from "./pages/Todo";
 
 import "./index.css";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <HomePage />,
+    },
+    {
+      path: "/todo",
+      element: <TodoPage />,
+    },
+    {
+      path: "*",
+      element: <Navigate to="/" replace />,
+    },
+  ],
   {
-    path: "/vite-todo-list/",
-    element: <HomePage />,
-  },
-  {
-    path: "/vite-todo-list/todo/",
-    element: <TodoPage />,
-  },
-  {
-    path: "*",
-    element: <Navigate to="/vite-todo-list/" replace />,
-  },
-]);
+    basename: "/vite-todo-list/",
+  }
+);
 
 function App() {
   return (
