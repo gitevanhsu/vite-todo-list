@@ -1,38 +1,38 @@
 import { useState } from "react";
+import { SubmitHandler } from "react-hook-form";
 import Logo from "../../components/Logo";
 import Form from "../../components/Form";
 import HomeImg from "/img.png";
-
+import { TitleType } from "../../components/Form";
 const signUpArray = ["email", "name", "password", "checkPassword"];
 const signInArray = ["email", "password"];
 
-export function SignIn() {
+function SignIn() {
+  const onSignIn: SubmitHandler<TitleType> = (data) => {
+    console.log(data);
+  };
   return (
     <>
       <h1 className="font-bold text-2xl">最實用的線上代辦事項服務</h1>
-      <Form formData={signInArray} />
-      <button className="w-[160px] h-[47px] mx-auto rounded-[10px] bg-stone-800 text-white text-center">
-        登入
-      </button>
+      <Form formData={signInArray} submitHandler={onSignIn} isSignUp={false} />
     </>
   );
 }
 
-export function SignUp() {
+function SignUp() {
+  const onSignUp: SubmitHandler<TitleType> = (data) => {
+    console.log(data);
+  };
   return (
     <>
       <h1 className="font-bold text-2xl">註冊帳號</h1>
-      <Form formData={signUpArray} />
-      <button className="w-[160px] h-[47px] rounded-[10px] bg-stone-800 text-white	 mx-auto text-center">
-        註冊帳號
-      </button>
+      <Form formData={signUpArray} submitHandler={onSignUp} isSignUp />
     </>
   );
 }
 
 export default function HomePage() {
   const [isSignUp, setIsSignUp] = useState(false);
-
   const toggleIsSignUp = () => setIsSignUp((i) => !i);
 
   return (

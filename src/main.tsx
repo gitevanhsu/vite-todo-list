@@ -36,7 +36,7 @@ const router = createBrowserRouter(
 function App() {
   return (
     <React.StrictMode>
-      <div className="relative h-screen pt-[50px] pb-[20px] my-home-bg">
+      <div className="relative min-h-screen pt-[50px] pb-[20px] my-home-bg flex flex-col justify-center">
         <Header />
         <RouterProvider router={router} />
         <Footer />
