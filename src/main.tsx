@@ -27,10 +27,18 @@ const router = createBrowserRouter([
     element: <Navigate to="/vite-todo-list/" replace />,
   },
 ]);
+
+function App() {
+  return (
+    <React.StrictMode>
+      <div className="relative h-screen pt-[50px] pb-[20px] my-home-bg">
+        <Header />
+        <RouterProvider router={router} />
+        <Footer />
+      </div>
+    </React.StrictMode>
+  );
+}
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <Header />
-    <RouterProvider router={router} />
-    <Footer />
-  </React.StrictMode>
+  <App />
 );
