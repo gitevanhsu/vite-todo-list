@@ -56,7 +56,7 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
         <div key={self + item} className="text-left my-[20px]">
           <p className="font-semibold text-sm mb-1">{title[item]}</p>
           <input
-            type={item.includes("password") ? "password" : "text"}
+            type={item.toLowerCase().includes("password") ? "password" : "text"}
             placeholder={placeholder[item]}
             {...register(item, {
               required: {

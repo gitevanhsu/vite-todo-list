@@ -1,40 +1,11 @@
 import { useContext, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
 import Logo from "../../components/Logo";
-import Form from "../../components/Form";
-import HomeImg from "/img.png";
-import { inputTextType } from "../../types";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { UserInfo } from "../../context/userContext";
-const signUpArray = ["email", "name", "password", "checkPassword"];
-const signInArray = ["email", "password"];
-
-function SignIn() {
-  const { setUser } = useContext(UserInfo);
-  const onSignIn: SubmitHandler<inputTextType> = (data) => {
-    console.log(data);
-  };
-  return (
-    <>
-      <h1 className="font-bold text-2xl">最實用的線上代辦事項服務</h1>
-      <Form formData={signInArray} submitHandler={onSignIn} isSignUp={false} />
-    </>
-  );
-}
-
-function SignUp() {
-  const { setUser } = useContext(UserInfo);
-  const onSignUp: SubmitHandler<inputTextType> = (data) => {
-    console.log(data);
-  };
-  return (
-    <>
-      <h1 className="font-bold text-2xl">註冊帳號</h1>
-      <Form formData={signUpArray} submitHandler={onSignUp} isSignUp />
-    </>
-  );
-}
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import HomeImg from "/img.png";
 
 export default function HomePage() {
   const { user } = useContext(UserInfo);
