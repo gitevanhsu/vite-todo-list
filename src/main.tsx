@@ -1,4 +1,5 @@
-import React from "react";
+import React, { ReactElement, useState } from "react";
+
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
@@ -6,12 +7,12 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import HomePage from "./pages/Home";
 import TodoPage from "./pages/Todo";
 
 import "./index.css";
+import { UserInfo } from "./context/userContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter(
   [
@@ -21,7 +22,11 @@ const router = createBrowserRouter(
     },
     {
       path: "/todo",
-      element: <TodoPage />,
+      element: (
+        <ProtectedRoute>
+          <TodoPage />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "*",
@@ -33,14 +38,23 @@ const router = createBrowserRouter(
   }
 );
 
+function UserContext({ children }: { children: ReactElement }) {
+  const [user, setUser] = useState({
+    name: "王小明",
+    uid: "",
+    isSign: true,
+  });
+  return (
+    <UserInfo.Provider value={{ user, setUser }}>{children}</UserInfo.Provider>
+  );
+}
+
 function App() {
   return (
     <React.StrictMode>
-      <div className="relative min-h-screen pt-[50px] pb-[20px] my-home-bg flex flex-col justify-center">
-        <Header />
+      <UserContext>
         <RouterProvider router={router} />
-        <Footer />
-      </div>
+      </UserContext>
     </React.StrictMode>
   );
 }
