@@ -40,9 +40,9 @@ const router = createBrowserRouter(
 
 function UserContext({ children }: { children: ReactElement }) {
   const [user, setUser] = useState({
-    name: "",
+    name: "王小明",
     uid: "",
-    isSign: false,
+    isSign: true,
   });
   return (
     <UserInfo.Provider value={{ user, setUser }}>{children}</UserInfo.Provider>
