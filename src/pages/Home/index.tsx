@@ -3,7 +3,7 @@ import { SubmitHandler } from "react-hook-form";
 import Logo from "../../components/Logo";
 import Form from "../../components/Form";
 import HomeImg from "/img.png";
-import { TitleType } from "../../components/Form";
+import { inputTextType } from "../../types";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { UserInfo } from "../../context/userContext";
@@ -11,7 +11,8 @@ const signUpArray = ["email", "name", "password", "checkPassword"];
 const signInArray = ["email", "password"];
 
 function SignIn() {
-  const onSignIn: SubmitHandler<TitleType> = (data) => {
+  const { setUser } = useContext(UserInfo);
+  const onSignIn: SubmitHandler<inputTextType> = (data) => {
     console.log(data);
   };
   return (
@@ -23,7 +24,8 @@ function SignIn() {
 }
 
 function SignUp() {
-  const onSignUp: SubmitHandler<TitleType> = (data) => {
+  const { setUser } = useContext(UserInfo);
+  const onSignUp: SubmitHandler<inputTextType> = (data) => {
     console.log(data);
   };
   return (

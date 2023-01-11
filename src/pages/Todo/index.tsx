@@ -19,7 +19,7 @@ export default function TodoPage() {
             className="rounded-[10px] px-[16px] py-[12px] w-full"
           />
           <div className="absolute right-[4px]">
-            <img src={Plus} alt="plus" />
+            <img src={Plus} alt="plus" className="cursor-pointer" />
           </div>
         </div>
 
