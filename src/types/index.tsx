@@ -31,3 +31,14 @@ export interface FormType {
   submitHandler: (data: inputTextType) => void;
   isSignUp: boolean;
 }
+export interface MemberSignInInfo {
+  email: string;
+  password: string;
+}
+export interface MemberSignUpInfo extends MemberSignInInfo {
+  name: string;
+}
+
+export interface MemberInfo extends MemberSignUpInfo {
+  uid: string;
+}

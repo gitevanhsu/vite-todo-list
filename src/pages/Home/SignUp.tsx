@@ -3,13 +3,15 @@ import { UserInfo } from "../../context/userContext";
 import { inputTextType } from "../../types";
 import { SubmitHandler } from "react-hook-form";
 import Form from "../../components/Form";
+import { emailSignUp } from "../../utils/firebaseFuns";
 
 const signUpArray = ["email", "name", "password", "checkPassword"];
 
 export default function SignUp() {
   const { setUser } = useContext(UserInfo);
   const onSignUp: SubmitHandler<inputTextType> = (data) => {
-    console.log(data);
+    const { name, email, password } = data;
+    emailSignUp({ name, email, password });
   };
   return (
     <>
