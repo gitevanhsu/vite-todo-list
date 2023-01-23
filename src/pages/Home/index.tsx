@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Logo from "../../components/Logo";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -6,6 +6,7 @@ import { UserInfo } from "../../context/userContext";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import HomeImg from "/img.png";
+import { redirect } from "react-router-dom";
 
 export default function HomePage() {
   const { user } = useContext(UserInfo);

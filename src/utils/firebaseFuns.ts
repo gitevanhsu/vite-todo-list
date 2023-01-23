@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, addDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 
 import { MemberSignInInfo, MemberSignUpInfo } from "../types";
 
@@ -20,7 +20,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth();
+export const auth = getAuth();
 
 export const saveUserInfo = (email: string) => {};
 
@@ -41,4 +41,13 @@ export const emailSignUp = async ({
     console.log(error);
   }
 };
-export const emailSignIn = ({ email, password }: MemberSignInInfo) => {};
+export const emailSignIn = async ({ email, password }: MemberSignInInfo) => {
+  await signInWithEmailAndPassword(auth, email, password);
+};
+
+export const memberSignOut = () => signOut(auth);
+
+export const getMemberInfo = async (uid: string) => {
+  const memberData = await getDoc(doc(db, "members", uid));
+  return memberData.data();
+};
