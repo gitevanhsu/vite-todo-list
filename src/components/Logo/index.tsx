@@ -1,5 +1,5 @@
 import LogoLg from "/logo_lg.png";
-import LogoSm from "/logo_lg.png";
+import LogoSm from "/logo.png";
 
 export default function Logo({ isBig }: { isBig: boolean }) {
   return (

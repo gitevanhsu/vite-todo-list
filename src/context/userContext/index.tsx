@@ -1,13 +1,15 @@
 import { createContext } from "react";
-import { UserContextType } from "../../types";
+import { MemberContextType } from "../../types";
 
-const userObj: UserContextType = {
-  user: {
+const memberObj: MemberContextType = {
+  member: {
     name: "",
     uid: "",
     isSign: false,
   },
-  setUser: () => {},
+  setMember: () => undefined,
 };
 
-export const UserInfo = createContext(userObj);
+const memberInfo = createContext(memberObj);
+
+export default memberInfo;

@@ -49,11 +49,11 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
         }, {} as inputTextType)
       );
     }
-  }, [formState, reset]);
+  }, [formData, formState, reset]);
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="text-center">
       {formData.map((item) => (
-        <div key={self + item} className="text-left my-[20px]">
+        <div key={item} className="text-left my-[20px]">
           <p className="font-semibold text-sm mb-1">{title[item]}</p>
           <input
             type={item.toLowerCase().includes("password") ? "password" : "text"}
@@ -74,6 +74,7 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
                       if (watch("password") !== val) {
                         return "Your passwords do no match";
                       }
+                      return "";
                     }
                   : undefined,
             })}

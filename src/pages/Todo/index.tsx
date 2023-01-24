@@ -1,16 +1,16 @@
 import { useContext } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import { UserInfo } from "../../context/userContext";
+import UserInfo from "../../context/userContext";
 import Plus from "/plus 1.png";
 import Vector from "/vector-x.png";
 
 export default function TodoPage() {
-  const { user } = useContext(UserInfo);
+  const { member } = useContext(UserInfo);
 
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-todo-bg flex flex-col justify-center">
-      {user.isSign && <Header />}
+      {member.isSign && <Header />}
       <main className="flex flex-col justify-center items-center">
         <div className="relative flex items-center sm:w-[500px] w-[311px]">
           <input
@@ -25,13 +25,13 @@ export default function TodoPage() {
 
         <div className="sm:w-[500px] w-[311px] bg-white rounded-[10px] shadow-md mt-[16px] text-gray-700 text-sm">
           <ul className="flex font-semibold">
-            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer	border-b-[2px] border-black">
+            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer border-b-[2px] border-black">
               <p>全部</p>
             </li>
-            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer	border-b text-gray-400">
+            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer border-b text-gray-400">
               <p>待完成</p>
             </li>
-            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer	border-b text-gray-400">
+            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer border-b text-gray-400">
               <p>已完成</p>
             </li>
           </ul>
@@ -39,8 +39,12 @@ export default function TodoPage() {
             <ul className="pl-[24px]">
               <li className="flex items-center justify-between ">
                 <div className="py-[15px] border-b w-full">
-                  <label className="flex items-center cursor-pointer">
+                  <label
+                    htmlFor="item1"
+                    className="flex items-center cursor-pointer"
+                  >
                     <input
+                      id="item1"
                       type="checkbox"
                       value="true"
                       className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
@@ -56,14 +60,18 @@ export default function TodoPage() {
               </li>
               <li className="flex items-center justify-between ">
                 <div className="py-[15px] border-b w-full">
-                  <label className="flex items-center cursor-pointer">
+                  <label
+                    htmlFor="item2"
+                    className="flex items-center cursor-pointer"
+                  >
                     <input
+                      id="item2"
                       type="checkbox"
                       value="true"
                       className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
                       checked
                     />
-                    <span className="line-through	text-gray-400">
+                    <span className="line-through text-gray-400">
                       打電話叫媽媽匯款給我
                     </span>
                   </label>
@@ -76,8 +84,12 @@ export default function TodoPage() {
               </li>
               <li className="flex items-center justify-between ">
                 <div className="py-[15px] border-b w-full">
-                  <label className="flex items-center cursor-pointer">
+                  <label
+                    htmlFor="item3"
+                    className="flex items-center cursor-pointer"
+                  >
                     <input
+                      id="item3"
                       type="checkbox"
                       value="true"
                       className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
@@ -93,14 +105,18 @@ export default function TodoPage() {
               </li>
               <li className="flex items-center justify-between ">
                 <div className="py-[15px] border-b w-full">
-                  <label className="flex items-center cursor-pointer">
+                  <label
+                    htmlFor="item4"
+                    className="flex items-center cursor-pointer"
+                  >
                     <input
+                      id="item4"
                       type="checkbox"
                       value="true"
                       className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
                       checked
                     />
-                    <span className="line-through	text-gray-400">
+                    <span className="line-through text-gray-400">
                       繳電費水費瓦斯費
                     </span>
                   </label>
@@ -113,8 +129,12 @@ export default function TodoPage() {
               </li>
               <li className="flex items-center justify-between ">
                 <div className="py-[15px] border-b w-full">
-                  <label className="flex items-center cursor-pointer">
+                  <label
+                    htmlFor="item5"
+                    className="flex items-center cursor-pointer"
+                  >
                     <input
+                      id="item5"
                       type="checkbox"
                       value="true"
                       className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
@@ -130,8 +150,12 @@ export default function TodoPage() {
               </li>
               <li className="flex items-center justify-between ">
                 <div className="py-[15px] border-b w-full">
-                  <label className="flex items-center cursor-pointer">
+                  <label
+                    htmlFor="item6"
+                    className="flex items-center cursor-pointer"
+                  >
                     <input
+                      id="item6"
                       type="checkbox"
                       value="true"
                       className="w-[20px] h-[20px] mr-[16px] cursor-pointer"

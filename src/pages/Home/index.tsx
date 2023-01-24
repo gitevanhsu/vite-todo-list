@@ -1,31 +1,35 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../../components/Logo";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { UserInfo } from "../../context/userContext";
+import memberInfo from "../../context/userContext";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import HomeImg from "/img.png";
-import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
-  const { user } = useContext(UserInfo);
+  const { member } = useContext(memberInfo);
   const [isSignUp, setIsSignUp] = useState(false);
   const toggleIsSignUp = () => setIsSignUp((i) => !i);
   const navigate = useNavigate();
 
   useEffect(() => {
-    user.isSign ? navigate("todo") : navigate("/");
-  }, [user]);
+    if (member.isSign) {
+      navigate("todo");
+    } else {
+      navigate("/");
+    }
+  }, [navigate, member]);
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-home-bg flex flex-col justify-center">
-      {user.isSign && <Header />}
+      {member.isSign && <Header />}
       <main className="h-full flex flex-col md:flex-row items-center justify-center">
-        <div className="flex flex-col	items-center">
-          <Logo isBig={true} />
+        <div className="flex flex-col items-center">
+          <Logo isBig />
           <img
             src={HomeImg}
-            alt="Home image"
+            alt="Home"
             className="mt-[20px] hidden md:inline-block"
           />
         </div>
@@ -33,6 +37,7 @@ export default function HomePage() {
           {isSignUp ? <SignUp /> : <SignIn />}
           <button
             className="block w-[160px] h-[47px] mx-auto text-center"
+            type="button"
             onClick={toggleIsSignUp}
           >
             {isSignUp ? "登入" : "註冊帳號"}
