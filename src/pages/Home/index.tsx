@@ -6,13 +6,17 @@ import { UserInfo } from "../../context/userContext";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import HomeImg from "/img.png";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const { user } = useContext(UserInfo);
   const [isSignUp, setIsSignUp] = useState(false);
   const toggleIsSignUp = () => setIsSignUp((i) => !i);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    user.isSign ? navigate("todo") : navigate("/");
+  }, [user]);
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-home-bg flex flex-col justify-center">
       {user.isSign && <Header />}

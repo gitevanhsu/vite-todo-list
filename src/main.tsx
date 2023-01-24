@@ -6,6 +6,7 @@ import {
   RouterProvider,
   Navigate,
   redirect,
+  useNavigate,
 } from "react-router-dom";
 
 import HomePage from "./pages/Home";
@@ -14,7 +15,7 @@ import TodoPage from "./pages/Todo";
 import "./index.css";
 import { UserInfo } from "./context/userContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { getIdToken, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth, getMemberInfo } from "./utils/firebaseFuns";
 import { MemberInfo } from "./types";
 
@@ -48,10 +49,8 @@ function UserContext({ children }: { children: ReactElement }) {
     uid: "",
     isSign: false,
   });
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user);
       if (user) {
         getMemberInfo(user.uid).then((memberData) => {
           setUser({ ...(memberData as MemberInfo), isSign: true });
