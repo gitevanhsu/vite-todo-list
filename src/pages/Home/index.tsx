@@ -1,44 +1,22 @@
-import { useContext, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
+import { useContext, useEffect, useState } from "react";
 import Logo from "../../components/Logo";
-import Form from "../../components/Form";
-import HomeImg from "/img.png";
-import { TitleType } from "../../components/Form";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { UserInfo } from "../../context/userContext";
-const signUpArray = ["email", "name", "password", "checkPassword"];
-const signInArray = ["email", "password"];
-
-function SignIn() {
-  const onSignIn: SubmitHandler<TitleType> = (data) => {
-    console.log(data);
-  };
-  return (
-    <>
-      <h1 className="font-bold text-2xl">最實用的線上代辦事項服務</h1>
-      <Form formData={signInArray} submitHandler={onSignIn} isSignUp={false} />
-    </>
-  );
-}
-
-function SignUp() {
-  const onSignUp: SubmitHandler<TitleType> = (data) => {
-    console.log(data);
-  };
-  return (
-    <>
-      <h1 className="font-bold text-2xl">註冊帳號</h1>
-      <Form formData={signUpArray} submitHandler={onSignUp} isSignUp />
-    </>
-  );
-}
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import HomeImg from "/img.png";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const { user } = useContext(UserInfo);
   const [isSignUp, setIsSignUp] = useState(false);
   const toggleIsSignUp = () => setIsSignUp((i) => !i);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    user.isSign ? navigate("todo") : navigate("/");
+  }, [user]);
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-home-bg flex flex-col justify-center">
       {user.isSign && <Header />}
