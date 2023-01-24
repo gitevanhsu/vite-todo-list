@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 
-interface UserType {
+interface MemberType {
   name: string;
   uid: string;
   isSign: boolean;
 }
 
-export interface UserContextType {
-  user: UserType;
-  setUser: Dispatch<SetStateAction<UserType>>;
+export interface MemberContextType {
+  member: MemberType;
+  setMember: Dispatch<SetStateAction<MemberType>>;
 }
 
 export interface inputTextType {
@@ -39,6 +39,10 @@ export interface MemberSignUpInfo extends MemberSignInInfo {
   name: string;
 }
 
-export interface MemberInfo extends MemberSignUpInfo {
+export interface MemberInfoType extends MemberSignUpInfo {
   uid: string;
+}
+
+export interface SignOutType {
+  clickHandler: () => void;
 }

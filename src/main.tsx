@@ -1,23 +1,19 @@
-import React, { ReactElement, useEffect, useState } from "react";
-
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
-  redirect,
-  useNavigate,
 } from "react-router-dom";
-
-import HomePage from "./pages/Home";
-import TodoPage from "./pages/Todo";
+import { onAuthStateChanged } from "firebase/auth";
 
 import "./index.css";
-import { UserInfo } from "./context/userContext";
+import HomePage from "./pages/Home";
+import TodoPage from "./pages/Todo";
+import UserInfo from "./context/userContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth, getMemberInfo } from "./utils/firebaseFuns";
-import { MemberInfo } from "./types";
+import { MemberInfoType } from "./types";
 
 const router = createBrowserRouter(
   [
@@ -44,7 +40,7 @@ const router = createBrowserRouter(
 );
 
 function UserContext({ children }: { children: ReactElement }) {
-  const [user, setUser] = useState({
+  const [member, setMember] = useState({
     name: "王小明",
     uid: "",
     isSign: false,
@@ -53,7 +49,7 @@ function UserContext({ children }: { children: ReactElement }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         getMemberInfo(user.uid).then((memberData) => {
-          setUser({ ...(memberData as MemberInfo), isSign: true });
+          setMember({ ...(memberData as MemberInfoType), isSign: true });
         });
       }
     });
@@ -63,8 +59,10 @@ function UserContext({ children }: { children: ReactElement }) {
     };
   }, []);
 
+  const memberInfoValue = useMemo(() => ({ member, setMember }), [member]);
+
   return (
-    <UserInfo.Provider value={{ user, setUser }}>{children}</UserInfo.Provider>
+    <UserInfo.Provider value={memberInfoValue}>{children}</UserInfo.Provider>
   );
 }
 
