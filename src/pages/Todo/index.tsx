@@ -3,67 +3,21 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import UserInfo from "../../context/userContext";
 import Plus from "/plus 1.png";
-import Vector from "/vector-x.png";
+import { TabItemProps, TodoProps } from "../../types";
+import TodoList from "../../components/TodoList";
 
-const data = [
-  {
-    todo: "把冰箱發霉的檸檬拿去丟",
-    completed: false,
-  },
-  {
-    todo: "打電話叫媽媽匯款給我",
-    completed: true,
-  },
-  {
-    todo: "整理電腦資料夾",
-    completed: false,
-  },
-  {
-    todo: "繳電費水費瓦斯費",
-    completed: true,
-  },
-  {
-    todo: "約vicky禮拜三泡溫泉",
-    completed: false,
-  },
-  {
-    todo: "約ada禮拜四吃晚餐",
-    completed: false,
-  },
-];
+const tadList = ["全部", "待完成", "已完成"];
 
-function TodoItem({
-  todo,
-  completed,
-  index,
-  triggerCompleted,
-}: {
-  todo: string;
-  completed: boolean;
-  index: number;
-  triggerCompleted: (num: number) => void;
-}) {
+function TabItem({ tabItem, currentTab, index, setTab }: TabItemProps) {
   return (
-    <li className="flex items-center justify-between">
-      <div className="py-[15px] border-b w-full">
-        <label htmlFor={todo} className="flex items-center cursor-pointer">
-          <input
-            readOnly
-            id={todo}
-            type="checkbox"
-            value="true"
-            checked={completed}
-            className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
-            onClick={() => triggerCompleted(index)}
-          />
-          <span>{todo}</span>
-        </label>
-      </div>
-      <img
-        src={Vector}
-        alt="x"
-        className="w-[14px] h-[14px] mx-[17px] cursor-pointer"
-      />
+    <li
+      aria-hidden="true"
+      onClick={() => setTab(index)}
+      className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
+        currentTab ? "border-b-[2px] border-black" : "border-b text-gray-400"
+      }`}
+    >
+      <p>{tabItem}</p>
     </li>
   );
 }
@@ -71,8 +25,8 @@ function TodoItem({
 export default function TodoPage() {
   const { member } = useContext(UserInfo);
   const [inputValue, setInputValue] = useState("");
-  const [todoList, setTodoList] = useState(data);
-  const [tab, setTab] = useState(1);
+  const [todoList, setTodoList] = useState<TodoProps[]>([]);
+  const [tab, setTab] = useState(0);
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -80,20 +34,37 @@ export default function TodoPage() {
 
   const addTodoKeyBoard = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      if (inputValue.trim() === "") {
+        alert("尚未輸入內容");
+        return;
+      }
       setTodoList((t) => [...t, { todo: inputValue, completed: false }]);
       setInputValue("");
     }
   };
 
   const addTodoKeyMouse = () => {
+    if (inputValue.trim() === "") {
+      alert("尚未輸入內容");
+      return;
+    }
     setTodoList((t) => [...t, { todo: inputValue, completed: false }]);
     setInputValue("");
   };
 
-  const triggerCompleted = (index: number) => {
-    const newTodo = [...todoList];
-    newTodo[index].completed = !newTodo[index].completed;
-    setTodoList(newTodo);
+  const triggerCompleted = (item: string) => {
+    setTodoList((t) =>
+      t.map((todoItem) => {
+        if (todoItem.todo === item) {
+          return { ...todoItem, completed: !todoItem.completed };
+        }
+        return todoItem;
+      })
+    );
+  };
+
+  const removeItem = (item: string) => {
+    setTodoList((t) => t.filter((todoItem) => todoItem.todo !== item));
   };
 
   const clearCompleted = () => {
@@ -123,54 +94,24 @@ export default function TodoPage() {
         </div>
         <div className="sm:w-[500px] w-[311px] bg-white rounded-[10px] shadow-md mt-[16px] text-gray-700 text-sm">
           <ul className="flex font-semibold">
-            <li
-              aria-hidden="true"
-              onClick={() => setTab(1)}
-              className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
-                tab === 1
-                  ? "border-b-[2px] border-black"
-                  : "border-b text-gray-400"
-              }`}
-            >
-              <p>全部</p>
-            </li>
-            <li
-              aria-hidden="true"
-              onClick={() => setTab(2)}
-              className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
-                tab === 2
-                  ? "border-b-[2px] border-black"
-                  : "border-b text-gray-400"
-              }`}
-            >
-              <p>待完成</p>
-            </li>
-            <li
-              aria-hidden="true"
-              onClick={() => setTab(3)}
-              className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
-                tab === 3
-                  ? "border-b-[2px] border-black"
-                  : "border-b text-gray-400"
-              }`}
-            >
-              <p>已完成</p>
-            </li>
+            {tadList.map((tabItem, index) => (
+              <TabItem
+                key={tabItem}
+                tabItem={tabItem}
+                currentTab={tab === index}
+                index={index}
+                setTab={setTab}
+              />
+            ))}
           </ul>
           <div>
             <ul className="pl-[24px]">
-              {todoList.map((item, index) => {
-                const { todo, completed } = item;
-                return (
-                  <TodoItem
-                    key={todo}
-                    todo={todo}
-                    index={index}
-                    completed={completed}
-                    triggerCompleted={triggerCompleted}
-                  />
-                );
-              })}
+              <TodoList
+                tab={tab}
+                todoList={todoList}
+                triggerCompleted={triggerCompleted}
+                removeItem={removeItem}
+              />
             </ul>
             <div className="flex items-center justify-between ml-[24px] mr-[48px] pt-[25px] pb-[32px]">
               <p>

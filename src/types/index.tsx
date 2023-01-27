@@ -46,3 +46,28 @@ export interface MemberInfoType extends MemberSignUpInfo {
 export interface SignOutType {
   clickHandler: () => void;
 }
+
+export interface TodoProps {
+  todo: string;
+  completed: boolean;
+}
+
+export interface TabItemProps {
+  tabItem: string;
+  currentTab: boolean;
+  index: number;
+  setTab: Dispatch<SetStateAction<number>>;
+}
+export interface TodoListProps {
+  tab: number;
+  todoList: TodoProps[];
+  triggerCompleted: (item: string) => void;
+  removeItem: (item: string) => void;
+}
+
+export interface TodoItemProps {
+  todo: string;
+  completed: boolean;
+  triggerCompleted: (item: string) => void;
+  removeItem: (item: string) => void;
+}
