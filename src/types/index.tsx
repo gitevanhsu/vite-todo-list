@@ -71,3 +71,8 @@ export interface TodoItemProps {
   triggerCompleted: (item: string) => void;
   removeItem: (item: string) => void;
 }
+
+export interface MemberWorks {
+  stickyList: object[];
+  todoList: TodoProps[];
+}

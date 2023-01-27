@@ -1,32 +1,26 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import UserInfo from "../../context/userContext";
 import Plus from "/plus 1.png";
-import { TabItemProps, TodoProps } from "../../types";
+import { TodoProps } from "../../types";
 import TodoList from "../../components/TodoList";
+import { getTodo, upDateMemberTodoList } from "../../utils/firebaseFuns";
+import TabItem from "../../components/TabItem";
 
 const tadList = ["全部", "待完成", "已完成"];
-
-function TabItem({ tabItem, currentTab, index, setTab }: TabItemProps) {
-  return (
-    <li
-      aria-hidden="true"
-      onClick={() => setTab(index)}
-      className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
-        currentTab ? "border-b-[2px] border-black" : "border-b text-gray-400"
-      }`}
-    >
-      <p>{tabItem}</p>
-    </li>
-  );
-}
 
 export default function TodoPage() {
   const { member } = useContext(UserInfo);
   const [inputValue, setInputValue] = useState("");
   const [todoList, setTodoList] = useState<TodoProps[]>([]);
   const [tab, setTab] = useState(0);
+
+  useEffect(() => {
+    if (member.uid) {
+      getTodo(member.uid).then((data) => setTodoList(data));
+    }
+  }, [member.uid]);
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -38,8 +32,10 @@ export default function TodoPage() {
         alert("尚未輸入內容");
         return;
       }
-      setTodoList((t) => [...t, { todo: inputValue, completed: false }]);
+      const newTodoList = [...todoList, { todo: inputValue, completed: false }];
+      setTodoList(newTodoList);
       setInputValue("");
+      upDateMemberTodoList(member.uid, newTodoList);
     }
   };
 
@@ -48,27 +44,33 @@ export default function TodoPage() {
       alert("尚未輸入內容");
       return;
     }
-    setTodoList((t) => [...t, { todo: inputValue, completed: false }]);
+    const newTodoList = [...todoList, { todo: inputValue, completed: false }];
+    setTodoList(newTodoList);
     setInputValue("");
+    upDateMemberTodoList(member.uid, newTodoList);
   };
 
   const triggerCompleted = (item: string) => {
-    setTodoList((t) =>
-      t.map((todoItem) => {
-        if (todoItem.todo === item) {
-          return { ...todoItem, completed: !todoItem.completed };
-        }
-        return todoItem;
-      })
-    );
+    const newTodoList = todoList.map((todoItem) => {
+      if (todoItem.todo === item) {
+        return { ...todoItem, completed: !todoItem.completed };
+      }
+      return todoItem;
+    });
+    setTodoList(newTodoList);
+    upDateMemberTodoList(member.uid, newTodoList);
   };
 
   const removeItem = (item: string) => {
-    setTodoList((t) => t.filter((todoItem) => todoItem.todo !== item));
+    const newTodoList = todoList.filter((todoItem) => todoItem.todo !== item);
+    setTodoList(newTodoList);
+    upDateMemberTodoList(member.uid, newTodoList);
   };
 
   const clearCompleted = () => {
-    setTodoList((c) => c.filter((item) => !item.completed));
+    const newTodoList = todoList.filter((item) => !item.completed);
+    setTodoList(newTodoList);
+    upDateMemberTodoList(member.uid, newTodoList);
   };
 
   return (
