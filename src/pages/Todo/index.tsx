@@ -32,10 +32,47 @@ const data = [
   },
 ];
 
+function TodoItem({
+  todo,
+  completed,
+  index,
+  triggerCompleted,
+}: {
+  todo: string;
+  completed: boolean;
+  index: number;
+  triggerCompleted: (num: number) => void;
+}) {
+  return (
+    <li className="flex items-center justify-between">
+      <div className="py-[15px] border-b w-full">
+        <label htmlFor={todo} className="flex items-center cursor-pointer">
+          <input
+            readOnly
+            id={todo}
+            type="checkbox"
+            value="true"
+            checked={completed}
+            className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
+            onClick={() => triggerCompleted(index)}
+          />
+          <span>{todo}</span>
+        </label>
+      </div>
+      <img
+        src={Vector}
+        alt="x"
+        className="w-[14px] h-[14px] mx-[17px] cursor-pointer"
+      />
+    </li>
+  );
+}
+
 export default function TodoPage() {
   const { member } = useContext(UserInfo);
   const [inputValue, setInputValue] = useState("");
   const [todoList, setTodoList] = useState(data);
+  const [tab, setTab] = useState(1);
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -86,13 +123,37 @@ export default function TodoPage() {
         </div>
         <div className="sm:w-[500px] w-[311px] bg-white rounded-[10px] shadow-md mt-[16px] text-gray-700 text-sm">
           <ul className="flex font-semibold">
-            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer border-b-[2px] border-black">
+            <li
+              aria-hidden="true"
+              onClick={() => setTab(1)}
+              className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
+                tab === 1
+                  ? "border-b-[2px] border-black"
+                  : "border-b text-gray-400"
+              }`}
+            >
               <p>全部</p>
             </li>
-            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer border-b text-gray-400">
+            <li
+              aria-hidden="true"
+              onClick={() => setTab(2)}
+              className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
+                tab === 2
+                  ? "border-b-[2px] border-black"
+                  : "border-b text-gray-400"
+              }`}
+            >
               <p>待完成</p>
             </li>
-            <li className="w-[33.33333%] text-center py-[15px] cursor-pointer border-b text-gray-400">
+            <li
+              aria-hidden="true"
+              onClick={() => setTab(3)}
+              className={`w-[33.33333%] text-center py-[15px] cursor-pointer ${
+                tab === 3
+                  ? "border-b-[2px] border-black"
+                  : "border-b text-gray-400"
+              }`}
+            >
               <p>已完成</p>
             </li>
           </ul>
@@ -101,30 +162,13 @@ export default function TodoPage() {
               {todoList.map((item, index) => {
                 const { todo, completed } = item;
                 return (
-                  <li key={todo} className="flex items-center justify-between">
-                    <div className="py-[15px] border-b w-full">
-                      <label
-                        htmlFor={todo}
-                        className="flex items-center cursor-pointer"
-                      >
-                        <input
-                          readOnly
-                          id={todo}
-                          type="checkbox"
-                          value="true"
-                          checked={completed}
-                          className="w-[20px] h-[20px] mr-[16px] cursor-pointer"
-                          onClick={() => triggerCompleted(index)}
-                        />
-                        <span>{todo}</span>
-                      </label>
-                    </div>
-                    <img
-                      src={Vector}
-                      alt="x"
-                      className="w-[14px] h-[14px] mx-[17px] cursor-pointer"
-                    />
-                  </li>
+                  <TodoItem
+                    key={todo}
+                    todo={todo}
+                    index={index}
+                    completed={completed}
+                    triggerCompleted={triggerCompleted}
+                  />
                 );
               })}
             </ul>
