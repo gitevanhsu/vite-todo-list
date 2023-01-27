@@ -5,11 +5,6 @@ import UserInfo from "../../context/userContext";
 import Plus from "/plus 1.png";
 import Vector from "/vector-x.png";
 
-interface TodoItemType {
-  todo: string;
-  completed: boolean;
-}
-
 const data = [
   {
     todo: "把冰箱發霉的檸檬拿去丟",
@@ -39,11 +34,29 @@ const data = [
 
 export default function TodoPage() {
   const { member } = useContext(UserInfo);
+  const [inputValue, setInputValue] = useState("");
   const [todoList, setTodoList] = useState(data);
 
+  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const addTodoKeyBoard = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setTodoList((t) => [...t, { todo: inputValue, completed: false }]);
+      setInputValue("");
+    }
+  };
+
+  const addTodoKeyMouse = () => {
+    setTodoList((t) => [...t, { todo: inputValue, completed: false }]);
+    setInputValue("");
+  };
+
   const triggerCompleted = (index: number) => {
-    todoList[index].completed = !todoList[index].completed;
-    setTodoList([...todoList]);
+    const newTodo = [...todoList];
+    newTodo[index].completed = !newTodo[index].completed;
+    setTodoList(newTodo);
   };
 
   const clearCompleted = () => {
@@ -59,8 +72,15 @@ export default function TodoPage() {
             type="text"
             placeholder="請輸入待辦事項"
             className="rounded-[10px] px-[16px] py-[12px] w-full"
+            value={inputValue}
+            onChange={inputHandler}
+            onKeyDown={addTodoKeyBoard}
           />
-          <div className="absolute right-[4px]">
+          <div
+            aria-hidden="true"
+            onClick={addTodoKeyMouse}
+            className="absolute right-[4px]"
+          >
             <img src={Plus} alt="plus" className="cursor-pointer" />
           </div>
         </div>
