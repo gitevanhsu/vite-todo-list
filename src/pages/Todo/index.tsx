@@ -84,7 +84,7 @@ export default function TodoPage() {
             className="rounded-[10px] px-[16px] py-[12px] w-full"
             value={inputValue}
             onChange={inputHandler}
-            onKeyDown={addTodoKeyBoard}
+            onKeyPress={addTodoKeyBoard}
           />
           <div
             aria-hidden="true"
