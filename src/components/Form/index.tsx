@@ -74,7 +74,6 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
                       if (watch("password") !== val) {
                         return "Your passwords do no match";
                       }
-                      return "";
                     }
                   : undefined,
             })}

@@ -5,9 +5,20 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 
-import { MemberSignInInfo, MemberSignUpInfo } from "../types";
+import {
+  MemberSignInInfo,
+  MemberSignUpInfo,
+  MemberWorks,
+  TodoProps,
+} from "../types";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -35,6 +46,7 @@ export const emailSignUp = async ({
     );
     const { uid } = userCredential.user;
     await setDoc(doc(db, "members", uid), { name, email, password, uid });
+    await setDoc(doc(db, "works", uid), { todoList: [], stickyList: [] });
   } catch (error) {
     console.log(error);
   }
@@ -48,4 +60,17 @@ export const memberSignOut = () => signOut(auth);
 export const getMemberInfo = async (uid: string) => {
   const memberData = await getDoc(doc(db, "members", uid));
   return memberData.data();
+};
+
+export const getTodo = async (uid: string) => {
+  const memberWorks = await getDoc(doc(db, "works", uid));
+  const { todoList } = memberWorks.data() as MemberWorks;
+  return todoList;
+};
+
+export const upDateMemberTodoList = async (
+  uid: string,
+  todoList: TodoProps[]
+) => {
+  await updateDoc(doc(db, "works", uid), { todoList });
 };
