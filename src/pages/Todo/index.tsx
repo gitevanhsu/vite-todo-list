@@ -32,7 +32,10 @@ export default function TodoPage() {
         alert("尚未輸入內容");
         return;
       }
-      const newTodoList = [...todoList, { todo: inputValue, completed: false }];
+      const newTodoList = [
+        ...todoList,
+        { todo: inputValue, completed: false, id: crypto.randomUUID() },
+      ];
       setTodoList(newTodoList);
       setInputValue("");
       upDateMemberTodoList(member.uid, newTodoList);
@@ -44,15 +47,18 @@ export default function TodoPage() {
       alert("尚未輸入內容");
       return;
     }
-    const newTodoList = [...todoList, { todo: inputValue, completed: false }];
+    const newTodoList = [
+      ...todoList,
+      { todo: inputValue, completed: false, id: crypto.randomUUID() },
+    ];
     setTodoList(newTodoList);
     setInputValue("");
     upDateMemberTodoList(member.uid, newTodoList);
   };
 
-  const triggerCompleted = (item: string) => {
+  const triggerCompleted = (id: string) => {
     const newTodoList = todoList.map((todoItem) => {
-      if (todoItem.todo === item) {
+      if (todoItem.id === id) {
         return { ...todoItem, completed: !todoItem.completed };
       }
       return todoItem;
@@ -61,8 +67,8 @@ export default function TodoPage() {
     upDateMemberTodoList(member.uid, newTodoList);
   };
 
-  const removeItem = (item: string) => {
-    const newTodoList = todoList.filter((todoItem) => todoItem.todo !== item);
+  const removeItem = (id: string) => {
+    const newTodoList = todoList.filter((todoItem) => todoItem.id !== id);
     setTodoList(newTodoList);
     upDateMemberTodoList(member.uid, newTodoList);
   };
@@ -107,14 +113,12 @@ export default function TodoPage() {
             ))}
           </ul>
           <div>
-            <ul className="pl-[24px]">
-              <TodoList
-                tab={tab}
-                todoList={todoList}
-                triggerCompleted={triggerCompleted}
-                removeItem={removeItem}
-              />
-            </ul>
+            <TodoList
+              tab={tab}
+              todoList={todoList}
+              triggerCompleted={triggerCompleted}
+              removeItem={removeItem}
+            />
             <div className="flex items-center justify-between ml-[24px] mr-[48px] pt-[25px] pb-[32px]">
               <p>
                 {todoList.filter((item) => item.completed).length}

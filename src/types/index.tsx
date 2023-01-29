@@ -50,6 +50,7 @@ export interface SignOutType {
 export interface TodoProps {
   todo: string;
   completed: boolean;
+  id: string;
 }
 
 export interface TabItemProps {
@@ -61,15 +62,16 @@ export interface TabItemProps {
 export interface TodoListProps {
   tab: number;
   todoList: TodoProps[];
-  triggerCompleted: (item: string) => void;
-  removeItem: (item: string) => void;
+  triggerCompleted: (id: string) => void;
+  removeItem: (id: string) => void;
 }
 
 export interface TodoItemProps {
   todo: string;
   completed: boolean;
-  triggerCompleted: (item: string) => void;
-  removeItem: (item: string) => void;
+  id: string;
+  triggerCompleted: (id: string) => void;
+  removeItem: (id: string) => void;
 }
 
 export interface MemberWorks {
