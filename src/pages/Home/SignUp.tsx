@@ -3,12 +3,14 @@ import { inputTextType } from "../../types";
 import Form from "../../components/Form";
 import { emailSignUp } from "../../utils/firebaseFuns";
 
-const signUpArray = ["email", "name", "password", "checkPassword"];
+const signUpArray = ["email", "name", "password", "checkPassword", "photo"];
 
 export default function SignUp() {
   const onSignUp: SubmitHandler<inputTextType> = (data) => {
-    const { name, email, password } = data;
-    emailSignUp({ name, email, password });
+    const { name, email, password, photo } = data;
+    console.log(photo);
+    console.log(photo[0]);
+    // emailSignUp({ name, email, password });
   };
   return (
     <>

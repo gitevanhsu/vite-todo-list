@@ -7,6 +7,7 @@ const placeholder: inputTextType = {
   name: "請輸入您的暱稱",
   password: "請輸入密碼",
   checkPassword: "請再次輸入密碼",
+  photo: "可選擇是否上傳照片",
 };
 
 const title: inputTextType = {
@@ -14,6 +15,7 @@ const title: inputTextType = {
   name: "您的暱稱",
   password: "輸入密碼",
   checkPassword: "再次輸入密碼",
+  photo: "可選擇是否上傳照片",
 };
 
 const inputPattern: inputCheckType = {
@@ -28,6 +30,7 @@ const errorMessage: inputTextType = {
   name: "請勿輸入空白",
   password: "密碼至少6位數",
   checkPassword: "密碼至少6位數",
+  photo: "",
 };
 
 export default function Form({ formData, submitHandler, isSignUp }: FormType) {
@@ -56,11 +59,18 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
         <div key={item} className="text-left my-[20px]">
           <p className="font-semibold text-sm mb-1">{title[item]}</p>
           <input
-            type={item.toLowerCase().includes("password") ? "password" : "text"}
+            type={
+              item.toLowerCase().includes("password")
+                ? "password"
+                : item === "photo"
+                ? "file"
+                : "text"
+            }
             placeholder={placeholder[item]}
             {...register(item, {
               required: {
-                value: true,
+                value: false,
+                // value: item !== "photo" && true,
                 message: errorMessage[item],
               },
               pattern: inputPattern[item],
@@ -74,6 +84,7 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
                       if (watch("password") !== val) {
                         return "Your passwords do no match";
                       }
+                      return undefined;
                     }
                   : undefined,
             })}

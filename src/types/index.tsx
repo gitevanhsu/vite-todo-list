@@ -17,6 +17,7 @@ export interface inputTextType {
   name: string;
   password: string;
   checkPassword: string;
+  photo: string;
 }
 
 export interface inputCheckType {

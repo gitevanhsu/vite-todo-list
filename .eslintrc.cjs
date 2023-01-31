@@ -44,5 +44,10 @@ module.exports = {
     "import/no-unresolved": 0,
     "react/jsx-props-no-spreading": 0,
     "no-param-reassign": 0,
+    "no-nested-ternary": 0,
+    indent: 0,
+    "comma-dangle": 0,
+    "no-useless-escape": 0,
+    "object-curly-newline": 0,
   },
 };
