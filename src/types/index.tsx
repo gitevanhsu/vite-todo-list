@@ -11,6 +11,25 @@ export interface MemberContextType {
   setMember: Dispatch<SetStateAction<MemberType>>;
 }
 
+interface InputDetail {
+  title: string;
+  verify: RegExp;
+  error: string;
+  type: string;
+  accept: string;
+  placeHolder: string;
+  require: boolean;
+  minLength: number;
+}
+
+export interface InputItem {
+  [key: string]: InputDetail;
+  email: InputDetail;
+  name: InputDetail;
+  password: InputDetail;
+  checkPassword: InputDetail;
+  photo: InputDetail;
+}
 export interface inputTextType {
   [key: string]: string;
   email: string;
@@ -20,13 +39,6 @@ export interface inputTextType {
   photo: string;
 }
 
-export interface inputCheckType {
-  [key: string]: RegExp;
-  email: RegExp;
-  name: RegExp;
-  password: RegExp;
-  checkPassword: RegExp;
-}
 export interface FormType {
   formData: string[];
   submitHandler: (data: inputTextType) => void;
