@@ -4,6 +4,7 @@ interface MemberType {
   name: string;
   uid: string;
   isSign: boolean;
+  url: string;
 }
 
 export interface MemberContextType {
@@ -31,12 +32,12 @@ export interface InputItem {
   photo: InputDetail;
 }
 export interface inputTextType {
-  [key: string]: string;
+  [key: string]: string | File[];
   email: string;
   name: string;
   password: string;
   checkPassword: string;
-  photo: string;
+  photo: File[];
 }
 
 export interface FormType {
@@ -50,6 +51,7 @@ export interface MemberSignInInfo {
 }
 export interface MemberSignUpInfo extends MemberSignInInfo {
   name: string;
+  url: string;
 }
 
 export interface MemberInfoType extends MemberSignUpInfo {

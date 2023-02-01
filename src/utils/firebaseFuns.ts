@@ -12,7 +12,7 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import {
   MemberSignInInfo,
   MemberSignUpInfo,
@@ -31,12 +31,24 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
+const storageImageRef = ref(storage, "image");
+
 export const auth = getAuth();
+
+export const uploadImage = async (id: string, file: File) => {
+  if (!file) return "";
+  const storageRef = ref(storageImageRef, id);
+  const result = await uploadBytes(storageRef, file);
+  const photoUrl = await getDownloadURL(result.ref);
+  return photoUrl;
+};
 
 export const emailSignUp = async ({
   name,
   email,
   password,
+  url,
 }: MemberSignUpInfo) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -45,8 +57,14 @@ export const emailSignUp = async ({
       password
     );
     const { uid } = userCredential.user;
-    await setDoc(doc(db, "members", uid), { name, email, password, uid });
     await setDoc(doc(db, "works", uid), { todoList: [], stickyList: [] });
+    await setDoc(doc(db, "members", uid), {
+      name,
+      email,
+      password,
+      uid,
+      url,
+    });
   } catch (error) {
     console.log(error);
   }

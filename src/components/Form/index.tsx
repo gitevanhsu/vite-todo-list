@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormType, InputItem, inputTextType } from "../../types";
 
@@ -65,6 +65,7 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
     formState,
     formState: { errors },
   } = useForm<inputTextType>();
+  const [userPhoto, setUserPhoto] = useState("");
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -76,6 +77,16 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
       );
     }
   }, [formData, formState, reset]);
+
+  const getUserPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    if (e.target.files[0]) {
+      setUserPhoto(URL.createObjectURL(e.target.files[0]));
+    } else {
+      setUserPhoto("");
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="text-center">
       {formData.map((item) => (
@@ -87,7 +98,6 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
             placeholder={itemDetail[item].placeHolder}
             {...register(item, {
               required: {
-                // value: false,
                 value: itemDetail[item].require,
                 message: itemDetail[item].error,
               },
@@ -98,7 +108,7 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
               },
               validate:
                 item === "checkPassword"
-                  ? (val: string) => {
+                  ? (val: string | File[]) => {
                       if (watch("password") !== val) {
                         return "Your passwords do no match";
                       }
@@ -108,7 +118,9 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
             })}
             className="w-full py-[12px] px-[16px] rounded-[10px]"
             autoComplete={item.includes("password") ? "on" : ""}
+            onChange={item === "photo" ? getUserPhoto : () => undefined}
           />
+
           {errors[item]?.type === "required" && (
             <p className="text-red-600">{itemDetail[item].error}</p>
           )}
@@ -123,6 +135,13 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
           )}
         </div>
       ))}
+      {userPhoto && (
+        <img
+          src={userPhoto}
+          alt="upload-file"
+          className="max-w-[100px] max-h-[100px] pb-[12px] mt-[-20px]"
+        />
+      )}
       <button
         type="submit"
         className="w-[160px] h-[47px] rounded-[10px] bg-stone-800 text-white text-center"
