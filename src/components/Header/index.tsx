@@ -9,13 +9,20 @@ export default function Header() {
 
   const onSignOut = () => {
     memberSignOut();
-    setMember({ name: "", uid: "", isSign: false });
+    setMember({ name: "", uid: "", url: "", isSign: false });
   };
 
   return (
     <header className="absolute top-0 w-full h-[50px] px-[20px] py-[10px] flex items-center justify-between">
       <Logo isBig={false} />
-      <div className="flex">
+      <div className="flex items-center">
+        {member.url && (
+          <img
+            src={member.url}
+            alt="avatar"
+            className="w-[40px] h-[40px] mr-[10px] rounded-full"
+          />
+        )}
         <div className="font-semibold hidden sm:block">
           {member.name}
           的代辦

@@ -14,10 +14,12 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import {
+  MemberInfoType,
   MemberSignInInfo,
   MemberSignUpInfo,
   MemberWorks,
   TodoProps,
+  MemberType,
 } from "../types";
 
 const firebaseConfig = {
@@ -44,12 +46,10 @@ export const uploadImage = async (id: string, file: File) => {
   return photoUrl;
 };
 
-export const emailSignUp = async ({
-  name,
-  email,
-  password,
-  url,
-}: MemberSignUpInfo) => {
+export const emailSignUp = async (
+  { name, email, password, url }: MemberSignUpInfo,
+  setMember: React.Dispatch<React.SetStateAction<MemberType>>
+) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -58,13 +58,8 @@ export const emailSignUp = async ({
     );
     const { uid } = userCredential.user;
     await setDoc(doc(db, "works", uid), { todoList: [], stickyList: [] });
-    await setDoc(doc(db, "members", uid), {
-      name,
-      email,
-      password,
-      uid,
-      url,
-    });
+    await setDoc(doc(db, "members", uid), { name, email, password, uid, url });
+    setMember({ name, uid, url, isSign: true });
   } catch (error) {
     console.log(error);
   }

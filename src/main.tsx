@@ -44,6 +44,7 @@ function UserContext({ children }: { children: ReactElement }) {
     name: "王小明",
     uid: "",
     isSign: false,
+    url: "",
   });
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

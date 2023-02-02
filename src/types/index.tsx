@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-interface MemberType {
+export interface MemberType {
   name: string;
   uid: string;
   isSign: boolean;
