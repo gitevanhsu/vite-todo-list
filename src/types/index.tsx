@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
-interface MemberType {
+export interface MemberType {
   name: string;
   uid: string;
   isSign: boolean;
+  url: string;
 }
 
 export interface MemberContextType {
@@ -11,21 +12,34 @@ export interface MemberContextType {
   setMember: Dispatch<SetStateAction<MemberType>>;
 }
 
+interface InputDetail {
+  title: string;
+  verify: RegExp;
+  error: string;
+  type: string;
+  accept: string;
+  placeHolder: string;
+  require: boolean;
+  minLength: number;
+}
+
+export interface InputItem {
+  [key: string]: InputDetail;
+  email: InputDetail;
+  name: InputDetail;
+  password: InputDetail;
+  checkPassword: InputDetail;
+  photo: InputDetail;
+}
 export interface inputTextType {
-  [key: string]: string;
+  [key: string]: string | File[];
   email: string;
   name: string;
   password: string;
   checkPassword: string;
+  photo: File[];
 }
 
-export interface inputCheckType {
-  [key: string]: RegExp;
-  email: RegExp;
-  name: RegExp;
-  password: RegExp;
-  checkPassword: RegExp;
-}
 export interface FormType {
   formData: string[];
   submitHandler: (data: inputTextType) => void;
@@ -37,6 +51,7 @@ export interface MemberSignInInfo {
 }
 export interface MemberSignUpInfo extends MemberSignInInfo {
   name: string;
+  url: string;
 }
 
 export interface MemberInfoType extends MemberSignUpInfo {

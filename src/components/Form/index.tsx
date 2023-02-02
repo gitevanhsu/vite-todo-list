@@ -1,33 +1,59 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FormType, inputCheckType, inputTextType } from "../../types";
+import { FormType, InputItem, inputTextType } from "../../types";
 
-const placeholder: inputTextType = {
-  email: "請輸入Email",
-  name: "請輸入您的暱稱",
-  password: "請輸入密碼",
-  checkPassword: "請再次輸入密碼",
-};
-
-const title: inputTextType = {
-  email: "Email",
-  name: "您的暱稱",
-  password: "輸入密碼",
-  checkPassword: "再次輸入密碼",
-};
-
-const inputPattern: inputCheckType = {
-  email: /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/,
-  name: /^[^ ]*$/,
-  password: /^[^ ]*$/,
-  checkPassword: /^[^ ]*$/,
-};
-
-const errorMessage: inputTextType = {
-  email: "請輸入正確 email",
-  name: "請勿輸入空白",
-  password: "密碼至少6位數",
-  checkPassword: "密碼至少6位數",
+const itemDetail: InputItem = {
+  email: {
+    title: "請輸入Email",
+    verify:
+      /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/,
+    error: "請輸入正確 email",
+    type: "text",
+    accept: "",
+    placeHolder: "請輸入Email",
+    require: true,
+    minLength: 1,
+  },
+  name: {
+    title: "請輸入您的暱稱",
+    verify: /^[^ ]*$/,
+    error: "請勿輸入空白",
+    type: "text",
+    accept: "",
+    placeHolder: "請輸入您的暱稱",
+    require: true,
+    minLength: 1,
+  },
+  password: {
+    title: "請輸入密碼",
+    verify: /^[^ ]*$/,
+    error: "密碼至少6位數",
+    type: "password",
+    accept: "",
+    placeHolder: "請輸入密碼",
+    require: true,
+    minLength: 6,
+  },
+  checkPassword: {
+    title: "請再次輸入密碼",
+    verify: /^[^ ]*$/,
+    error: "密碼至少6位數",
+    type: "password",
+    accept: "",
+    placeHolder: "請輸入密碼",
+    require: true,
+    minLength: 6,
+  },
+  photo: {
+    title: "可選擇是否上傳照片",
+    verify: /./,
+    error: "",
+    type: "file",
+    accept: "image/*",
+    placeHolder: "",
+    require: false,
+    minLength: 1,
+  },
 };
 
 export default function Form({ formData, submitHandler, isSignUp }: FormType) {
@@ -39,6 +65,7 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
     formState,
     formState: { errors },
   } = useForm<inputTextType>();
+  const [userPhoto, setUserPhoto] = useState("");
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -50,41 +77,55 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
       );
     }
   }, [formData, formState, reset]);
+
+  const getUserPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    if (e.target.files[0]) {
+      setUserPhoto(URL.createObjectURL(e.target.files[0]));
+    } else {
+      setUserPhoto("");
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="text-center">
       {formData.map((item) => (
         <div key={item} className="text-left my-[20px]">
-          <p className="font-semibold text-sm mb-1">{title[item]}</p>
+          <p className="font-semibold text-sm mb-1">{itemDetail[item].title}</p>
           <input
-            type={item.toLowerCase().includes("password") ? "password" : "text"}
-            placeholder={placeholder[item]}
+            accept={itemDetail[item].accept}
+            type={itemDetail[item].type}
+            placeholder={itemDetail[item].placeHolder}
             {...register(item, {
               required: {
-                value: true,
-                message: errorMessage[item],
+                value: itemDetail[item].require,
+                message: itemDetail[item].error,
               },
-              pattern: inputPattern[item],
+              pattern: itemDetail[item].verify,
               minLength: {
-                value: item.includes("password") ? 6 : 1,
+                value: itemDetail[item].minLength,
                 message: "密碼至少6位數",
               },
               validate:
                 item === "checkPassword"
-                  ? (val: string) => {
+                  ? (val: string | File[]) => {
                       if (watch("password") !== val) {
                         return "Your passwords do no match";
                       }
+                      return undefined;
                     }
                   : undefined,
             })}
             className="w-full py-[12px] px-[16px] rounded-[10px]"
             autoComplete={item.includes("password") ? "on" : ""}
+            onChange={item === "photo" ? getUserPhoto : () => undefined}
           />
+
           {errors[item]?.type === "required" && (
-            <p className="text-red-600">{errorMessage[item]}</p>
+            <p className="text-red-600">{itemDetail[item].error}</p>
           )}
           {errors[item]?.type === "pattern" && (
-            <p className="text-red-600">{errorMessage[item]}</p>
+            <p className="text-red-600">{itemDetail[item].error}</p>
           )}
           {errors[item]?.type === "minLength" && (
             <p className="text-red-600">密碼至少六位數</p>
@@ -94,6 +135,13 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
           )}
         </div>
       ))}
+      {userPhoto && (
+        <img
+          src={userPhoto}
+          alt="upload-file"
+          className="max-w-[100px] max-h-[100px] pb-[12px] mt-[-20px]"
+        />
+      )}
       <button
         type="submit"
         className="w-[160px] h-[47px] rounded-[10px] bg-stone-800 text-white text-center"

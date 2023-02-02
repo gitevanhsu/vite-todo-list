@@ -12,12 +12,14 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import {
+  MemberInfoType,
   MemberSignInInfo,
   MemberSignUpInfo,
   MemberWorks,
   TodoProps,
+  MemberType,
 } from "../types";
 
 const firebaseConfig = {
@@ -31,13 +33,23 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
+const storageImageRef = ref(storage, "image");
+
 export const auth = getAuth();
 
-export const emailSignUp = async ({
-  name,
-  email,
-  password,
-}: MemberSignUpInfo) => {
+export const uploadImage = async (id: string, file: File) => {
+  if (!file) return "";
+  const storageRef = ref(storageImageRef, id);
+  const result = await uploadBytes(storageRef, file);
+  const photoUrl = await getDownloadURL(result.ref);
+  return photoUrl;
+};
+
+export const emailSignUp = async (
+  { name, email, password, url }: MemberSignUpInfo,
+  setMember: React.Dispatch<React.SetStateAction<MemberType>>
+) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -45,8 +57,9 @@ export const emailSignUp = async ({
       password
     );
     const { uid } = userCredential.user;
-    await setDoc(doc(db, "members", uid), { name, email, password, uid });
     await setDoc(doc(db, "works", uid), { todoList: [], stickyList: [] });
+    await setDoc(doc(db, "members", uid), { name, email, password, uid, url });
+    setMember({ name, uid, url, isSign: true });
   } catch (error) {
     console.log(error);
   }

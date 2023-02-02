@@ -6,6 +6,7 @@ const memberObj: MemberContextType = {
     name: "",
     uid: "",
     isSign: false,
+    url: "",
   },
   setMember: () => undefined,
 };
