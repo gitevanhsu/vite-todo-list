@@ -37,7 +37,7 @@ const storageImageRef = ref(storage, "image");
 
 export const auth = getAuth();
 
-const uploadImage = async (id: string, file: File) => {
+const uploadImage = async (id: string, file: File | undefined) => {
   if (!file) return "";
   const storageRef = ref(storageImageRef, id);
   const result = await uploadBytes(storageRef, file);
@@ -86,4 +86,18 @@ export const upDateMemberTodoList = async (
   todoList: TodoProps[]
 ) => {
   await updateDoc(doc(db, "works", uid), { todoList });
+};
+
+export const updateMemberInfo = async (
+  member: MemberType,
+  element: HTMLInputElement,
+  name: string,
+  setMember: React.Dispatch<React.SetStateAction<MemberType>>
+) => {
+  const fileList = element.files as unknown as File[];
+  const url = await uploadImage(member.uid, fileList[0]);
+  await updateDoc(doc(db, "members", member.uid), {
+    name,
+  });
+  setMember((m) => ({ ...m, name, url }));
 };
