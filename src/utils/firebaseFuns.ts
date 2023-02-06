@@ -14,7 +14,6 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import {
-  MemberInfoType,
   MemberSignInInfo,
   MemberSignUpInfo,
   MemberWorks,
@@ -38,7 +37,7 @@ const storageImageRef = ref(storage, "image");
 
 export const auth = getAuth();
 
-export const uploadImage = async (id: string, file: File) => {
+const uploadImage = async (id: string, file: File | undefined) => {
   if (!file) return "";
   const storageRef = ref(storageImageRef, id);
   const result = await uploadBytes(storageRef, file);
@@ -47,7 +46,7 @@ export const uploadImage = async (id: string, file: File) => {
 };
 
 export const emailSignUp = async (
-  { name, email, password, url }: MemberSignUpInfo,
+  { name, email, password, photo }: MemberSignUpInfo,
   setMember: React.Dispatch<React.SetStateAction<MemberType>>
 ) => {
   try {
@@ -57,6 +56,7 @@ export const emailSignUp = async (
       password
     );
     const { uid } = userCredential.user;
+    const url = await uploadImage(uid, photo[0]);
     await setDoc(doc(db, "works", uid), { todoList: [], stickyList: [] });
     await setDoc(doc(db, "members", uid), { name, email, password, uid, url });
     setMember({ name, uid, url, isSign: true });
@@ -86,4 +86,18 @@ export const upDateMemberTodoList = async (
   todoList: TodoProps[]
 ) => {
   await updateDoc(doc(db, "works", uid), { todoList });
+};
+
+export const updateMemberInfo = async (
+  member: MemberType,
+  element: HTMLInputElement,
+  name: string,
+  setMember: React.Dispatch<React.SetStateAction<MemberType>>
+) => {
+  const fileList = element.files as unknown as File[];
+  const url = await uploadImage(member.uid, fileList[0]);
+  await updateDoc(doc(db, "members", member.uid), {
+    name,
+  });
+  setMember((m) => ({ ...m, name, url }));
 };

@@ -51,7 +51,7 @@ export interface MemberSignInInfo {
 }
 export interface MemberSignUpInfo extends MemberSignInInfo {
   name: string;
-  url: string;
+  photo: File[];
 }
 
 export interface MemberInfoType extends MemberSignUpInfo {

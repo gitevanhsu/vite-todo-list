@@ -67,16 +67,19 @@ export default function Form({ formData, submitHandler, isSignUp }: FormType) {
   } = useForm<inputTextType>();
   const [userPhoto, setUserPhoto] = useState("");
 
-  useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      reset(
-        formData.reduce((obj, item) => {
-          obj[item] = "";
-          return obj;
-        }, {} as inputTextType)
-      );
-    }
-  }, [formData, formState, reset]);
+  useEffect(
+    () => () => {
+      if (formState.isSubmitSuccessful) {
+        reset(
+          formData.reduce((obj, item) => {
+            obj[item] = "";
+            return obj;
+          }, {} as inputTextType)
+        );
+      }
+    },
+    [formData, formState, reset]
+  );
 
   const getUserPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
