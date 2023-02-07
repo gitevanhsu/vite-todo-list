@@ -27,7 +27,12 @@ export default function Modal({
       ) : (
         <div className="w-[300px] h-[300px] flex flex-col justify-center items-center p-5 text-center bg-white rounded-[10px] ">
           <div className="w-[100px] h-[100px] rounded-full overflow-hidden box-border border-2 border-black/40">
-            <img src={url} alt="avatar" />
+            <img
+              src={
+                url || "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+              }
+              alt="avatar"
+            />
           </div>
           <h2 className="my-5 text-2xl">{name}</h2>
           <button

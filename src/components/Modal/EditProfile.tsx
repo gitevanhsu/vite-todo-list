@@ -16,7 +16,7 @@ export default function EditModal({
   const { member, setMember } = useContext(memberInfo);
 
   const [value, setValue] = useState(name);
-  const [userPhoto, setUserPhoto] = useState(url);
+  const [userPhoto, setUserPhoto] = useState(url || save);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
