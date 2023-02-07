@@ -13,7 +13,6 @@ import TodoPage from "./pages/Todo";
 import UserInfo from "./context/userContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { auth, getMemberInfo } from "./utils/firebaseFuns";
-import { MemberInfoType } from "./types";
 
 const router = createBrowserRouter(
   [
@@ -50,7 +49,7 @@ function UserContext({ children }: { children: ReactElement }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         getMemberInfo(user.uid).then((memberData) => {
-          setMember({ ...(memberData as MemberInfoType), isSign: true });
+          setMember({ ...memberData, isSign: true });
         });
       }
     });

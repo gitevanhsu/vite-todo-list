@@ -72,7 +72,7 @@ export const memberSignOut = () => signOut(auth);
 
 export const getMemberInfo = async (uid: string) => {
   const memberData = await getDoc(doc(db, "members", uid));
-  return memberData.data();
+  return memberData.data() as MemberType;
 };
 
 export const getTodo = async (uid: string) => {
@@ -98,6 +98,7 @@ export const updateMemberInfo = async (
   const url = await uploadImage(member.uid, fileList[0]);
   await updateDoc(doc(db, "members", member.uid), {
     name,
+    url,
   });
   setMember((m) => ({ ...m, name, url }));
 };
