@@ -10,6 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import "./index.css";
 import HomePage from "./pages/Home";
 import TodoPage from "./pages/Todo";
+import WorksPage from "./pages/Works";
 import UserInfo from "./context/userContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { auth, getMemberInfo } from "./utils/firebaseFuns";
@@ -25,6 +26,14 @@ const router = createBrowserRouter(
       element: (
         <ProtectedRoute>
           <TodoPage />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/works",
+      element: (
+        <ProtectedRoute>
+          <WorksPage />
         </ProtectedRoute>
       ),
     },
