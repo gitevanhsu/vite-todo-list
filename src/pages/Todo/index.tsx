@@ -7,6 +7,7 @@ import { TodoProps } from "../../types";
 import TodoList from "../../components/TodoList";
 import { getTodo, upDateMemberTodoList } from "../../utils/firebaseFuns";
 import TabItem from "../../components/TabItem";
+import RouterButton from "../../components/RouterButton";
 
 const tadList = ["全部", "待完成", "已完成"];
 
@@ -82,6 +83,7 @@ export default function TodoPage() {
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-todo-bg flex flex-col justify-center">
       {member.isSign && <Header />}
+      <RouterButton path="works" />
       <main className="flex flex-col justify-center items-center">
         <div className="relative flex items-center sm:w-[500px] w-[311px]">
           <input
