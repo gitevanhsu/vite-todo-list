@@ -105,4 +105,5 @@ export interface WorksInterface {
   items: WorksItemInterface[];
   addNewItemHandler: (id: string, name: string) => void;
   removeItem: (workId: string, itemId: string) => void;
+  editWorkTitle: (name: string) => void;
 }

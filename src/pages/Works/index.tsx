@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import UserInfo from "../../context/userContext";
 
 import RouterButton from "../../components/RouterButton";
-import { WorksInterface } from "../../types";
 import useOnClickOutside from "../../utils/useClickOutside";
+import Work from "../../components/Works";
 
 const sample = [
   {
@@ -19,109 +19,6 @@ const sample = [
     items: [{ id: crypto.randomUUID(), name: "item1" }],
   },
 ];
-
-function Item({
-  id,
-  name,
-  handleItemDelete,
-}: {
-  id: string;
-  name: string;
-  handleItemDelete: (itemId: string) => void;
-}) {
-  return (
-    <div className="w-full min-h-[50px] my-2 px-4 bg-amber-400 flex justify-between items-center rounded-[10px] text-xl group">
-      <p className="text-xl overflow-x-auto no-scrollbar">{name}</p>
-      <div
-        className="h-[30px] w-[30px] ml-1 shrink-0 bg-red-500 flex justify-center items-center rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        role="button"
-        tabIndex={0}
-        onClick={() => handleItemDelete(id)}
-        onKeyDown={(e) => {
-          if (e.key !== "Enter") return;
-          handleItemDelete(id);
-        }}
-      >
-        &#10005;
-      </div>
-    </div>
-  );
-}
-
-function Work({
-  id,
-  title,
-  items,
-  addNewItemHandler,
-  removeItem,
-}: WorksInterface) {
-  const [isAdding, setIsAdding] = useState(false);
-  const [value, setValue] = useState("");
-  const addRef = useRef<HTMLDivElement>(null);
-
-  useOnClickOutside(addRef, () => {
-    setIsAdding(false);
-    setValue("");
-  });
-  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-
-  const addNewItem = (e: React.KeyboardEvent) => {
-    if (e.code === "Enter") {
-      if (!value.trim()) {
-        alert("請勿留空");
-        return;
-      }
-      addNewItemHandler(id, value);
-      setIsAdding(false);
-      setValue("");
-    }
-  };
-
-  const deleteItemHandler = (ItemId: string) => {
-    removeItem(id, ItemId);
-  };
-
-  return (
-    <div className="w-[250px] h-fit mr-4 bg-white/70 rounded-[10px] shrink-0">
-      <h3 className="my-3 border-b-2 border-black/50">{title}</h3>
-      <div className="m-2">
-        {items &&
-          items.map((item) => (
-            <Item
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              handleItemDelete={deleteItemHandler}
-            />
-          ))}
-        <div
-          className="w-full h-[80px] bg-black/30 relative flex justify-center items-center rounded-[10px] text-5xl cursor-pointer hover:bg-black/40 hover:scale-105 transition-transform"
-          role="button"
-          ref={addRef}
-          tabIndex={0}
-          onClick={() => setIsAdding(true)}
-          onKeyDown={(e) => {
-            if (e.key !== "Enter") return;
-            setIsAdding(true);
-          }}
-        >
-          {isAdding && (
-            <input
-              type="text"
-              className="w-[90%] text-base p-2 absolute rounded"
-              value={value}
-              onChange={inputHandler}
-              onKeyPress={addNewItem}
-            />
-          )}
-          <p className="text-5xl">&#43;</p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function TodoPage() {
   const { member } = useContext(UserInfo);
@@ -181,6 +78,20 @@ export default function TodoPage() {
     );
   };
 
+  const editWorkTitle = (workId: string, title: string) => {
+    setWorks((w) =>
+      w.map((work) => {
+        if (work.id === workId) {
+          return {
+            ...work,
+            title,
+          };
+        }
+        return work;
+      })
+    );
+  };
+
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-todo-bg flex flex-col justify-center">
       {member.isSign && <Header />}
@@ -197,6 +108,7 @@ export default function TodoPage() {
                   items={work.items}
                   addNewItemHandler={addNewItemHandler}
                   removeItem={removeItem}
+                  editWorkTitle={editWorkTitle}
                 />
               ))}
             <div
