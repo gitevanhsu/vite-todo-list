@@ -93,3 +93,16 @@ export interface MemberWorks {
   stickyList: object[];
   todoList: TodoProps[];
 }
+
+export interface WorksItemInterface {
+  id: string;
+  name: string;
+}
+
+export interface WorksInterface {
+  title: string;
+  id: string;
+  items: WorksItemInterface[];
+  addNewItemHandler: (id: string, name: string) => void;
+  removeItem: (workId: string, itemId: string) => void;
+}
