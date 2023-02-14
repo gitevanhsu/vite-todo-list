@@ -116,7 +116,7 @@ export default function TodoPage() {
       {member.isSign && <Header />}
       <RouterButton path="todo" />
       <main className="flex justify-center items-center">
-        <div className="w-[90%] min-h-[500px] my-home-bg border-4 text-center rounded-[10px] py-3 text-3xl overflow-auto">
+        <div className="w-[90%] h-[500px] my-home-bg border-4 text-center rounded-[10px] py-3 text-3xl overflow-auto no-scrollbar">
           <div className="p-5 flex">
             {works &&
               works.map((work) => (

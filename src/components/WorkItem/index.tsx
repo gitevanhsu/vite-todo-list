@@ -27,7 +27,7 @@ export default function WorkItem({
   };
 
   return (
-    <div className=" min-h-[50px] my-2 px-4 bg-amber-400 border-b-2 flex justify-between items-center rounded-[10px] text-xl group">
+    <div className="min-h-[50px] my-2 px-4 bg-amber-400 border-b-2 flex justify-between items-center rounded-[10px] text-xl group">
       <div
         ref={editRef}
         className="w-full overflow-x-auto no-scrollbar my-3 border-black/50 relative flex items-center cursor-pointer"
@@ -41,7 +41,7 @@ export default function WorkItem({
           <input
             type="text"
             value={value}
-            className="absolute w-[90%] rounded px-2"
+            className="absolute w-[100%] rounded px-2"
             onChange={itemInputHandler}
             onKeyPress={editItem}
           />

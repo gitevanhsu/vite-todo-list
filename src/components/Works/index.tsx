@@ -72,7 +72,7 @@ export default function Work({
           if (e.key === "Enter") setIsEditTitle(true);
         }}
       >
-        <h3>{title}</h3>
+        <h3 className="overflow-x-auto no-scrollbar px-4">{title}</h3>
         {isEditTitle && (
           <input
             type="text"
