@@ -6,6 +6,7 @@ import UserInfo from "../../context/userContext";
 import RouterButton from "../../components/RouterButton";
 import useOnClickOutside from "../../utils/useClickOutside";
 import Work from "../../components/Works";
+import InputHandler from "../../utils/inputHandler";
 
 const sample = [
   {
@@ -30,10 +31,6 @@ export default function TodoPage() {
     setIsAdding(false);
     setValue("");
   });
-
-  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
 
   const onKeyDownHandler = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -144,7 +141,7 @@ export default function TodoPage() {
                   type="text"
                   className="w-[90%] text-base p-2 absolute rounded"
                   value={value}
-                  onChange={inputHandler}
+                  onChange={(e) => InputHandler(e, setValue)}
                   onKeyPress={onKeyDownHandler}
                 />
               )}

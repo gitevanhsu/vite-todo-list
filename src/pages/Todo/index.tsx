@@ -8,6 +8,7 @@ import TodoList from "../../components/TodoList";
 import { getTodo, upDateMemberTodoList } from "../../utils/firebaseFuns";
 import TabItem from "../../components/TabItem";
 import RouterButton from "../../components/RouterButton";
+import InputHandler from "../../utils/inputHandler";
 
 const tadList = ["全部", "待完成", "已完成"];
 
@@ -22,10 +23,6 @@ export default function TodoPage() {
       getTodo(member.uid).then((data) => setTodoList(data));
     }
   }, [member.uid]);
-
-  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
 
   const addTodoKeyBoard = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -91,7 +88,7 @@ export default function TodoPage() {
             placeholder="請輸入待辦事項"
             className="rounded-[10px] px-[16px] py-[12px] w-full"
             value={inputValue}
-            onChange={inputHandler}
+            onChange={(e) => InputHandler(e, setInputValue)}
             onKeyPress={addTodoKeyBoard}
           />
           <div

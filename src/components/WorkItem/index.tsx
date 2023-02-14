@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { WorkItemInterface } from "../../types";
 import useOnClickOutside from "../../utils/useClickOutside";
+import InputHandler from "../../utils/inputHandler";
 
 export default function WorkItem({
   workId,
@@ -16,9 +17,7 @@ export default function WorkItem({
     setIsEdit(false);
     setValue(name);
   });
-  const itemInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
+
   const editItem = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       editItemName(workId, itemId, value);
@@ -42,7 +41,7 @@ export default function WorkItem({
             type="text"
             value={value}
             className="absolute w-[100%] rounded px-2"
-            onChange={itemInputHandler}
+            onChange={(e) => InputHandler(e, setValue)}
             onKeyPress={editItem}
           />
         )}

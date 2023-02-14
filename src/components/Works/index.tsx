@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { WorksInterface } from "../../types";
 import useOnClickOutside from "../../utils/useClickOutside";
 import WorkItem from "../WorkItem";
+import InputHandler from "../../utils/inputHandler";
 
 export default function Work({
   id,
@@ -27,12 +28,6 @@ export default function Work({
     setIsEditTitle(false);
     setTitleValue(title);
   });
-  const itemInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setItemValue(e.target.value);
-  };
-  const itemTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitleValue(e.target.value);
-  };
 
   const addNewItem = (e: React.KeyboardEvent) => {
     if (e.code === "Enter") {
@@ -78,7 +73,7 @@ export default function Work({
             type="text"
             value={titleValue}
             className="absolute w-[90%] rounded px-4 mb-2"
-            onChange={itemTitleHandler}
+            onChange={(e) => InputHandler(e, setTitleValue)}
             onKeyPress={editTitle}
           />
         )}
@@ -111,7 +106,7 @@ export default function Work({
               type="text"
               className="w-[90%] text-base p-2 absolute rounded"
               value={itemValue}
-              onChange={itemInputHandler}
+              onChange={(e) => InputHandler(e, setItemValue)}
               onKeyPress={addNewItem}
             />
           )}
