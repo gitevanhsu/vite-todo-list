@@ -64,20 +64,6 @@ export default function TodoPage() {
     );
   };
 
-  const removeItem = (workId: string, itemId: string) => {
-    setWorks((w) =>
-      w.map((work) => {
-        if (work.id === workId) {
-          return {
-            ...work,
-            items: work.items.filter((item) => item.id !== itemId),
-          };
-        }
-        return work;
-      })
-    );
-  };
-
   const editWorkTitle = (workId: string, title: string) => {
     setWorks((w) =>
       w.map((work) => {
@@ -85,6 +71,39 @@ export default function TodoPage() {
           return {
             ...work,
             title,
+          };
+        }
+        return work;
+      })
+    );
+  };
+
+  const editItemName = (workId: string, itemId: string, name: string) => {
+    setWorks((w) =>
+      w.map((work) => {
+        if (work.id === workId) {
+          return {
+            ...work,
+            items: work.items.map((item) => {
+              if (item.id === itemId) {
+                return { ...item, name };
+              }
+              return item;
+            }),
+          };
+        }
+        return work;
+      })
+    );
+  };
+
+  const removeItem = (workId: string, itemId: string) => {
+    setWorks((w) =>
+      w.map((work) => {
+        if (work.id === workId) {
+          return {
+            ...work,
+            items: work.items.filter((item) => item.id !== itemId),
           };
         }
         return work;
@@ -109,6 +128,7 @@ export default function TodoPage() {
                   addNewItemHandler={addNewItemHandler}
                   removeItem={removeItem}
                   editWorkTitle={editWorkTitle}
+                  editItemName={editItemName}
                 />
               ))}
             <div

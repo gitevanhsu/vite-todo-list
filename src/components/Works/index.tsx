@@ -10,6 +10,7 @@ export default function Work({
   addNewItemHandler,
   removeItem,
   editWorkTitle,
+  editItemName,
 }: WorksInterface) {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditTitle, setIsEditTitle] = useState(false);
@@ -63,7 +64,7 @@ export default function Work({
     <div className="w-[250px] h-fit mr-4 bg-white/70 rounded-[10px] shrink-0">
       <div
         ref={titleRef}
-        className="my-3 border-b-2 border-black/50 relative flex justify-center items-center cursor-pointer "
+        className="my-3 border-b-2 border-black/50 relative flex justify-center items-center cursor-pointer"
         onClick={() => setIsEditTitle(true)}
         role="button"
         tabIndex={0}
@@ -87,9 +88,11 @@ export default function Work({
           items.map((item) => (
             <WorkItem
               key={item.id}
-              id={item.id}
+              workId={id}
+              itemId={item.id}
               name={item.name}
               handleItemDelete={deleteItemHandler}
+              editItemName={editItemName}
             />
           ))}
         <div

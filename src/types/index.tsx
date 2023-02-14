@@ -99,11 +99,19 @@ export interface WorksItemInterface {
   name: string;
 }
 
+export interface WorkItemInterface {
+  workId: string;
+  itemId: string;
+  name: string;
+  handleItemDelete: (itemId: string) => void;
+  editItemName: (workId: string, itemId: string, name: string) => void;
+}
 export interface WorksInterface {
   title: string;
   id: string;
   items: WorksItemInterface[];
   addNewItemHandler: (id: string, name: string) => void;
   removeItem: (workId: string, itemId: string) => void;
-  editWorkTitle: (name: string) => void;
+  editWorkTitle: (workId: string, title: string) => void;
+  editItemName: (workId: string, itemId: string, name: string) => void;
 }
