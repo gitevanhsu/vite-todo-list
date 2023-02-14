@@ -95,6 +95,10 @@ export const updateMemberInfo = async (
   setMember: React.Dispatch<React.SetStateAction<MemberType>>
 ) => {
   const fileList = element.files as unknown as File[];
+  if (!fileList[0].type.includes("image")) {
+    alert("請上傳圖片");
+    return;
+  }
   const url = await uploadImage(member.uid, fileList[0]);
   await updateDoc(doc(db, "members", member.uid), {
     name,
