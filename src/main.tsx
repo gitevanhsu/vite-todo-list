@@ -6,6 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
+import { Provider } from "react-redux";
 
 import "./index.css";
 import HomePage from "./pages/Home";
@@ -14,6 +15,7 @@ import WorksPage from "./pages/Works";
 import UserInfo from "./context/userContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { auth, getMemberInfo } from "./utils/firebaseFuns";
+import store from "./store";
 
 const router = createBrowserRouter(
   [
@@ -79,7 +81,9 @@ function App() {
   return (
     <React.StrictMode>
       <UserContext>
-        <RouterProvider router={router} />
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
       </UserContext>
     </React.StrictMode>
   );

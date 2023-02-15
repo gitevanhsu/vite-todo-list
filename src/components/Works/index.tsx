@@ -1,18 +1,13 @@
+import { useDispatch } from "react-redux";
 import { useState, useRef } from "react";
 import { WorksInterface } from "../../types";
 import useOnClickOutside from "../../utils/useClickOutside";
 import WorkItem from "../WorkItem";
 import InputHandler from "../../utils/inputHandler";
+import { editWorkTitle, addNewItem } from "../../slice/workSlice";
 
-export default function Work({
-  id,
-  title,
-  items,
-  addNewItemHandler,
-  removeItem,
-  editWorkTitle,
-  editItemName,
-}: WorksInterface) {
+export default function Work({ workId, title, items }: WorksInterface) {
+  const dispatch = useDispatch();
   const [isAdding, setIsAdding] = useState(false);
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [itemValue, setItemValue] = useState("");
@@ -29,20 +24,16 @@ export default function Work({
     setTitleValue(title);
   });
 
-  const addNewItem = (e: React.KeyboardEvent) => {
+  const addItem = (e: React.KeyboardEvent) => {
     if (e.code === "Enter") {
       if (!itemValue.trim()) {
         alert("請勿留空");
         return;
       }
-      addNewItemHandler(id, itemValue);
+      dispatch(addNewItem({ workId, name: itemValue }));
       setIsAdding(false);
       setItemValue("");
     }
-  };
-
-  const deleteItemHandler = (ItemId: string) => {
-    removeItem(id, ItemId);
   };
 
   const editTitle = (e: React.KeyboardEvent) => {
@@ -51,7 +42,7 @@ export default function Work({
         alert("請勿留空");
         return;
       }
-      editWorkTitle(id, titleValue);
+      dispatch(editWorkTitle({ workId, title: titleValue }));
       setIsEditTitle(false);
     }
   };
@@ -67,7 +58,9 @@ export default function Work({
           if (e.key === "Enter") setIsEditTitle(true);
         }}
       >
-        <h3 className="overflow-x-auto no-scrollbar px-4">{title}</h3>
+        <h3 className="overflow-x-auto no-scrollbar px-4 whitespace-nowrap">
+          {title}
+        </h3>
         {isEditTitle && (
           <input
             type="text"
@@ -83,11 +76,9 @@ export default function Work({
           items.map((item) => (
             <WorkItem
               key={item.id}
-              workId={id}
+              workId={workId}
               itemId={item.id}
               name={item.name}
-              handleItemDelete={deleteItemHandler}
-              editItemName={editItemName}
             />
           ))}
         <div
@@ -107,7 +98,7 @@ export default function Work({
               className="w-[90%] text-base p-2 absolute rounded"
               value={itemValue}
               onChange={(e) => InputHandler(e, setItemValue)}
-              onKeyPress={addNewItem}
+              onKeyPress={addItem}
             />
           )}
           <p className="text-5xl">&#43;</p>

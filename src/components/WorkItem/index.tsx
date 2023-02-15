@@ -1,15 +1,12 @@
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { WorkItemInterface } from "../../types";
 import useOnClickOutside from "../../utils/useClickOutside";
+import { editItemName, removeItem } from "../../slice/workSlice";
 import InputHandler from "../../utils/inputHandler";
 
-export default function WorkItem({
-  workId,
-  itemId,
-  name,
-  handleItemDelete,
-  editItemName,
-}: WorkItemInterface) {
+export default function WorkItem({ workId, itemId, name }: WorkItemInterface) {
+  const dispatch = useDispatch();
   const [isEditName, setIsEdit] = useState(false);
   const [value, setValue] = useState(name);
   const editRef = useRef<HTMLDivElement>(null);
@@ -20,7 +17,7 @@ export default function WorkItem({
 
   const editItem = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      editItemName(workId, itemId, value);
+      dispatch(editItemName({ workId, itemId, name: value }));
       setIsEdit(false);
     }
   };
@@ -50,10 +47,10 @@ export default function WorkItem({
         className="h-[30px] w-[30px] ml-1 shrink-0 bg-red-500 flex justify-center items-center rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         role="button"
         tabIndex={0}
-        onClick={() => handleItemDelete(itemId)}
+        onClick={() => dispatch(removeItem({ workId, itemId }))}
         onKeyDown={(e) => {
           if (e.key !== "Enter") return;
-          handleItemDelete(itemId);
+          dispatch(removeItem({ workId, itemId }));
         }}
       >
         &#10005;
