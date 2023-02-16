@@ -75,6 +75,9 @@ const worksSlice = createSlice({
       const { works, event } = action.payload;
       if (!event.destination) return;
       state.isFirstRender = false;
+      if (event.type === "work" && event.destination.droppableId === "trash") {
+        state.works.splice(event.source.index, 1);
+      }
       if (event.type === "work") {
         const fromIndex = event.source.index;
         const toIndex = event.destination.index;

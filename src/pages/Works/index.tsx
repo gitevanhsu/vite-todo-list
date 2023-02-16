@@ -19,6 +19,7 @@ import { StoreInterface } from "../../types";
 import { addNewWork, fetchWorkList, dndAction } from "../../slice/workSlice";
 import { AppDispatch } from "../../store";
 import { syncWork } from "../../utils/firebaseFuns";
+import TrashBox from "../../components/TrashBox";
 
 let FirstRender = true;
 
@@ -30,6 +31,7 @@ export default function WorkPage() {
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const addRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (fetchStatus === "idle") {
@@ -43,7 +45,6 @@ export default function WorkPage() {
       return;
     }
     if (isFirstRender) return;
-    console.log(works);
     syncWork(member.uid, works);
   }, [dispatch, isFirstRender, member.uid, works]);
 
@@ -69,12 +70,19 @@ export default function WorkPage() {
       {member.isSign && <Header />}
       <RouterButton path="todo" />
       <main className="flex justify-center items-center">
-        <div className="w-[90%] h-[500px] my-home-bg border-4 text-center rounded-[10px] py-3 text-3xl overflow-auto no-scrollbar">
+        <div className="w-[90%] h-[500px] my-home-bg border-4 text-center rounded-[10px] py-3 text-3xl overflow-auto no-scrollbar relative">
           <DragDropContext
             onDragEnd={(event) => {
               dispatch(dndAction({ works, event }));
+              setIsDragging(false);
             }}
+            onDragStart={() => setIsDragging(true)}
           >
+            <Droppable droppableId="trash" direction="horizontal" type="work">
+              {(provided) => (
+                <TrashBox isDragging={isDragging} dropProvided={provided} />
+              )}
+            </Droppable>
             <Droppable droppableId="works" direction="horizontal" type="work">
               {(provided) => (
                 <div
