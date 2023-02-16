@@ -1,4 +1,6 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import UserInfo from "../../context/userContext";
@@ -7,26 +9,38 @@ import RouterButton from "../../components/RouterButton";
 import useOnClickOutside from "../../utils/useClickOutside";
 import Work from "../../components/Works";
 import InputHandler from "../../utils/inputHandler";
+import { StoreInterface } from "../../types";
+import { addNewWork, fetchWorkList } from "../../slice/workSlice";
+import { AppDispatch } from "../../store";
+import { syncWork } from "../../utils/firebaseFuns";
 
-const sample = [
-  {
-    id: crypto.randomUUID(),
-    title: "Title1",
-    items: [{ id: crypto.randomUUID(), name: "item1" }],
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Title2",
-    items: [{ id: crypto.randomUUID(), name: "item1" }],
-  },
-];
+let FirstRender = true;
 
-export default function TodoPage() {
+export default function WorkPage() {
   const { member } = useContext(UserInfo);
-  const [works, setWorks] = useState(sample);
+  const { works, fetchStatus, isFirstRender } = useSelector(
+    (state) => state
+  ) as StoreInterface;
+  const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const addRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (fetchStatus === "idle") {
+      dispatch(fetchWorkList(member.uid));
+    }
+  }, [dispatch, fetchStatus, member.uid]);
+
+  useEffect(() => {
+    if (FirstRender) {
+      FirstRender = false;
+      return;
+    }
+    if (isFirstRender) return;
+
+    dispatch(syncWork(member.uid, works));
+  }, [dispatch, isFirstRender, member.uid, works]);
+
   useOnClickOutside(addRef, () => {
     setIsAdding(false);
     setValue("");
@@ -38,74 +52,10 @@ export default function TodoPage() {
         alert("請勿留空");
         return;
       }
-      setWorks((w) => [
-        ...w,
-        { id: crypto.randomUUID(), title: value, items: [] },
-      ]);
+      dispatch(addNewWork({ title: value }));
       setValue("");
       setIsAdding(false);
     }
-  };
-
-  const addNewItemHandler = (id: string, name: string) => {
-    setWorks((w) =>
-      w.map((work) => {
-        if (work.id === id) {
-          return {
-            ...work,
-            items: [...work.items, { id: crypto.randomUUID(), name }],
-          };
-        }
-        return work;
-      })
-    );
-  };
-
-  const editWorkTitle = (workId: string, title: string) => {
-    setWorks((w) =>
-      w.map((work) => {
-        if (work.id === workId) {
-          return {
-            ...work,
-            title,
-          };
-        }
-        return work;
-      })
-    );
-  };
-
-  const editItemName = (workId: string, itemId: string, name: string) => {
-    setWorks((w) =>
-      w.map((work) => {
-        if (work.id === workId) {
-          return {
-            ...work,
-            items: work.items.map((item) => {
-              if (item.id === itemId) {
-                return { ...item, name };
-              }
-              return item;
-            }),
-          };
-        }
-        return work;
-      })
-    );
-  };
-
-  const removeItem = (workId: string, itemId: string) => {
-    setWorks((w) =>
-      w.map((work) => {
-        if (work.id === workId) {
-          return {
-            ...work,
-            items: work.items.filter((item) => item.id !== itemId),
-          };
-        }
-        return work;
-      })
-    );
   };
 
   return (
@@ -119,13 +69,9 @@ export default function TodoPage() {
               works.map((work) => (
                 <Work
                   key={work.id}
-                  id={work.id}
+                  workId={work.id}
                   title={work.title}
                   items={work.items}
-                  addNewItemHandler={addNewItemHandler}
-                  removeItem={removeItem}
-                  editWorkTitle={editWorkTitle}
-                  editItemName={editItemName}
                 />
               ))}
             <div

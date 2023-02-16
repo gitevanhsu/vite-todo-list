@@ -89,8 +89,17 @@ export interface TodoItemProps {
   removeItem: (id: string) => void;
 }
 
+export interface WorksType {
+  id: `${string}-${string}-${string}-${string}-${string}`;
+  title: string;
+  items: {
+    id: `${string}-${string}-${string}-${string}-${string}`;
+    name: string;
+  }[];
+}
+
 export interface MemberWorks {
-  stickyList: object[];
+  workList: WorksType[];
   todoList: TodoProps[];
 }
 
@@ -103,15 +112,15 @@ export interface WorkItemInterface {
   workId: string;
   itemId: string;
   name: string;
-  handleItemDelete: (itemId: string) => void;
-  editItemName: (workId: string, itemId: string, name: string) => void;
 }
 export interface WorksInterface {
   title: string;
-  id: string;
+  workId: string;
   items: WorksItemInterface[];
-  addNewItemHandler: (id: string, name: string) => void;
-  removeItem: (workId: string, itemId: string) => void;
-  editWorkTitle: (workId: string, title: string) => void;
-  editItemName: (workId: string, itemId: string, name: string) => void;
+}
+
+export interface StoreInterface {
+  works: WorksType[];
+  fetchStatus: string;
+  isFirstRender: boolean;
 }
