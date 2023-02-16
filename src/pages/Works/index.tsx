@@ -16,7 +16,7 @@ import useOnClickOutside from "../../utils/useClickOutside";
 import Work from "../../components/Works";
 import InputHandler from "../../utils/inputHandler";
 import { StoreInterface } from "../../types";
-import { addNewWork, fetchWorkList, switchWorks } from "../../slice/workSlice";
+import { addNewWork, fetchWorkList, dndAction } from "../../slice/workSlice";
 import { AppDispatch } from "../../store";
 import { syncWork } from "../../utils/firebaseFuns";
 
@@ -37,15 +37,15 @@ export default function WorkPage() {
     }
   }, [dispatch, fetchStatus, member.uid]);
 
-  // useEffect(() => {
-  //   if (FirstRender) {
-  //     FirstRender = false;
-  //     return;
-  //   }
-  //   if (isFirstRender) return;
-
-  //   syncWork(member.uid, works);
-  // }, [dispatch, isFirstRender, member.uid, works]);
+  useEffect(() => {
+    if (FirstRender) {
+      FirstRender = false;
+      return;
+    }
+    if (isFirstRender) return;
+    console.log(works);
+    syncWork(member.uid, works);
+  }, [dispatch, isFirstRender, member.uid, works]);
 
   useOnClickOutside(addRef, () => {
     setIsAdding(false);
@@ -64,8 +64,6 @@ export default function WorkPage() {
     }
   };
 
-  console.log(works);
-
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-todo-bg flex flex-col justify-center">
       {member.isSign && <Header />}
@@ -74,10 +72,10 @@ export default function WorkPage() {
         <div className="w-[90%] h-[500px] my-home-bg border-4 text-center rounded-[10px] py-3 text-3xl overflow-auto no-scrollbar">
           <DragDropContext
             onDragEnd={(event) => {
-              dispatch(switchWorks(event));
+              dispatch(dndAction({ works, event }));
             }}
           >
-            <Droppable droppableId="works" direction="horizontal">
+            <Droppable droppableId="works" direction="horizontal" type="work">
               {(provided) => (
                 <div
                   ref={provided.innerRef}

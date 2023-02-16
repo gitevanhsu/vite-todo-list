@@ -110,6 +110,7 @@ export interface WorksItemInterface {
 }
 
 export interface WorkItemInterface {
+  itemDragProvided: DraggableProvided;
   workId: string;
   itemId: string;
   name: string;
