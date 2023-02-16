@@ -19,6 +19,7 @@ import {
   MemberWorks,
   TodoProps,
   MemberType,
+  WorksType,
 } from "../types";
 
 const firebaseConfig = {
@@ -34,6 +35,23 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const storageImageRef = ref(storage, "image");
+
+export const initialState = {
+  works: [
+    {
+      id: crypto.randomUUID(),
+      title: "Your first work!",
+      items: [{ id: crypto.randomUUID(), name: "Hello" }],
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Your second work!",
+      items: [{ id: crypto.randomUUID(), name: "World" }],
+    },
+  ],
+  fetchStatus: "idle",
+  isFirstRender: true,
+};
 
 export const auth = getAuth();
 
@@ -57,7 +75,10 @@ export const emailSignUp = async (
     );
     const { uid } = userCredential.user;
     const url = await uploadImage(uid, photo[0]);
-    await setDoc(doc(db, "works", uid), { todoList: [], stickyList: [] });
+    await setDoc(doc(db, "works", uid), {
+      todoList: [],
+      workList: initialState.works,
+    });
     await setDoc(doc(db, "members", uid), { name, email, password, uid, url });
     setMember({ name, uid, url, isSign: true });
   } catch (error) {
@@ -79,6 +100,18 @@ export const getTodo = async (uid: string) => {
   const memberWorks = await getDoc(doc(db, "works", uid));
   const { todoList } = memberWorks.data() as MemberWorks;
   return todoList;
+};
+
+export const getWork = async (uid: string) => {
+  const memberWorks = await getDoc(doc(db, "works", uid));
+  const { workList } = memberWorks.data() as MemberWorks;
+  return workList;
+};
+
+export const syncWork = (uid: string, data: WorksType[]) => async () => {
+  await updateDoc(doc(db, "works", uid), {
+    workList: data,
+  });
 };
 
 export const upDateMemberTodoList = async (

@@ -1,44 +1,40 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { initialState, getWork, syncWork } from "../utils/firebaseFuns";
 
-const initialState = [
-  {
-    id: crypto.randomUUID(),
-    title: "Your first work!",
-    items: [{ id: crypto.randomUUID(), name: "Hello" }],
-  },
-  {
-    id: crypto.randomUUID(),
-    title: "Your second work!",
-    items: [{ id: crypto.randomUUID(), name: "World" }],
-  },
-];
+export const fetchWorkList = createAsyncThunk("getWorks", getWork);
 
 const worksSlice = createSlice({
   name: "works",
   initialState,
   reducers: {
     addNewWork: (state, action) => {
-      state.push({
+      state.works.push({
         id: crypto.randomUUID(),
         title: action.payload.title,
         items: [],
       });
+      state.isFirstRender = false;
     },
+
     editWorkTitle: (state, action) => {
-      state.forEach((work) => {
+      state.works.forEach((work) => {
         if (work.id === action.payload.workId) {
           work.title = action.payload.title;
         }
       });
+      state.isFirstRender = false;
     },
+
     removeWork: (state, action) => {
-      const index = state.findIndex(
+      const index = state.works.findIndex(
         (work) => work.id === action.payload.workId
       );
-      state.splice(index, 1);
+      state.works.splice(index, 1);
+      state.isFirstRender = false;
     },
+
     addNewItem: (state, action) => {
-      state.forEach((work) => {
+      state.works.forEach((work) => {
         if (work.id === action.payload.workId) {
           work.items.push({
             id: crypto.randomUUID(),
@@ -46,9 +42,11 @@ const worksSlice = createSlice({
           });
         }
       });
+      state.isFirstRender = false;
     },
+
     editItemName: (state, action) => {
-      state.forEach((work) => {
+      state.works.forEach((work) => {
         if (work.id === action.payload.workId) {
           work.items.forEach((item) => {
             if (item.id === action.payload.itemId) {
@@ -56,10 +54,12 @@ const worksSlice = createSlice({
             }
           });
         }
+        state.isFirstRender = false;
       });
     },
+
     removeItem: (state, action) => {
-      state.forEach((work) => {
+      state.works.forEach((work) => {
         if (work.id === action.payload.workId) {
           const index = work.items.findIndex(
             (item) => item.id === action.payload.itemId
@@ -67,7 +67,13 @@ const worksSlice = createSlice({
           work.items.splice(index, 1);
         }
       });
+      state.isFirstRender = false;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchWorkList.fulfilled, (state, action) => {
+      state.works = action.payload;
+    });
   },
 });
 

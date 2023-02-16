@@ -99,7 +99,7 @@ export interface WorksType {
 }
 
 export interface MemberWorks {
-  stickyList: object[];
+  workList: WorksType[];
   todoList: TodoProps[];
 }
 
@@ -117,4 +117,10 @@ export interface WorksInterface {
   title: string;
   workId: string;
   items: WorksItemInterface[];
+}
+
+export interface StoreInterface {
+  works: WorksType[];
+  fetchStatus: string;
+  isFirstRender: boolean;
 }

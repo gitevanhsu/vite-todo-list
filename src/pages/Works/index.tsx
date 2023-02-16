@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import Footer from "../../components/Footer";
@@ -9,16 +9,38 @@ import RouterButton from "../../components/RouterButton";
 import useOnClickOutside from "../../utils/useClickOutside";
 import Work from "../../components/Works";
 import InputHandler from "../../utils/inputHandler";
-import { WorksType } from "../../types";
-import { addNewWork } from "../../slice/workSlice";
+import { StoreInterface } from "../../types";
+import { addNewWork, fetchWorkList } from "../../slice/workSlice";
+import { AppDispatch } from "../../store";
+import { syncWork } from "../../utils/firebaseFuns";
 
-export default function TodoPage() {
+let FirstRender = true;
+
+export default function WorkPage() {
   const { member } = useContext(UserInfo);
-  const works = useSelector((state) => state) as WorksType[];
-  const dispatch = useDispatch();
+  const { works, fetchStatus, isFirstRender } = useSelector(
+    (state) => state
+  ) as StoreInterface;
+  const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const addRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (fetchStatus === "idle") {
+      dispatch(fetchWorkList(member.uid));
+    }
+  }, [dispatch, fetchStatus, member.uid]);
+
+  useEffect(() => {
+    if (FirstRender) {
+      FirstRender = false;
+      return;
+    }
+    if (isFirstRender) return;
+
+    dispatch(syncWork(member.uid, works));
+  }, [dispatch, isFirstRender, member.uid, works]);
+
   useOnClickOutside(addRef, () => {
     setIsAdding(false);
     setValue("");
