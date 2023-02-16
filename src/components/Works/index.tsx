@@ -6,7 +6,12 @@ import WorkItem from "../WorkItem";
 import InputHandler from "../../utils/inputHandler";
 import { editWorkTitle, addNewItem } from "../../slice/workSlice";
 
-export default function Work({ workId, title, items }: WorksInterface) {
+export default function Work({
+  dragProvided,
+  workId,
+  title,
+  items,
+}: WorksInterface) {
   const dispatch = useDispatch();
   const [isAdding, setIsAdding] = useState(false);
   const [isEditTitle, setIsEditTitle] = useState(false);
@@ -47,7 +52,12 @@ export default function Work({ workId, title, items }: WorksInterface) {
     }
   };
   return (
-    <div className="w-[250px] h-fit mr-4 bg-white/70 rounded-[10px] shrink-0">
+    <div
+      ref={dragProvided.innerRef}
+      {...dragProvided.draggableProps}
+      {...dragProvided.dragHandleProps}
+      className="w-[250px] h-fit mr-4 bg-white/70 rounded-[10px] shrink-0"
+    >
       <div
         ref={titleRef}
         className="my-3 border-b-2 border-black/50 relative flex justify-center items-center cursor-pointer"

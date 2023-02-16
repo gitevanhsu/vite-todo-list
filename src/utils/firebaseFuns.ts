@@ -108,7 +108,7 @@ export const getWork = async (uid: string) => {
   return workList;
 };
 
-export const syncWork = (uid: string, data: WorksType[]) => async () => {
+export const syncWork = async (uid: string, data: WorksType[]) => {
   await updateDoc(doc(db, "works", uid), {
     workList: data,
   });

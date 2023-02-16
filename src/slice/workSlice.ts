@@ -69,6 +69,16 @@ const worksSlice = createSlice({
       });
       state.isFirstRender = false;
     },
+
+    switchWorks: (state, action) => {
+      if (!action.payload.destination) return;
+      const fromIndex = action.payload.source.index;
+      const toIndex = action.payload.destination.index;
+      [state.works[fromIndex], state.works[toIndex]] = [
+        state.works[toIndex],
+        state.works[fromIndex],
+      ];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchWorkList.fulfilled, (state, action) => {
@@ -84,5 +94,6 @@ export const {
   addNewItem,
   editItemName,
   removeItem,
+  switchWorks,
 } = worksSlice.actions;
 export default worksSlice.reducer;
