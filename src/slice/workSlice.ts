@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { initialState, getWork, syncWork } from "../utils/firebaseFuns";
+import { WorksType } from "../types";
 
 export const fetchWorkList = createAsyncThunk("getWorks", getWork);
 
@@ -69,6 +70,42 @@ const worksSlice = createSlice({
       });
       state.isFirstRender = false;
     },
+
+    dndAction: (state, action) => {
+      const { works, event } = action.payload;
+      if (!event.destination) return;
+      state.isFirstRender = false;
+      if (event.type === "work" && event.destination.droppableId === "trash") {
+        state.works.splice(event.source.index, 1);
+        return;
+      }
+      if (event.type === "work") {
+        const fromIndex = event.source.index;
+        const toIndex = event.destination.index;
+        [state.works[fromIndex], state.works[toIndex]] = [
+          state.works[toIndex],
+          state.works[fromIndex],
+        ];
+        return;
+      }
+      if (event.type === "item") {
+        const fromWorkIndex = works.findIndex(
+          (item: WorksType) => item.id === event.source.droppableId
+        );
+        const toListIndex = works.findIndex(
+          (item: WorksType) => item.id === event.destination.droppableId
+        );
+        const dragItem = works[fromWorkIndex].items.filter(
+          (item: WorksType) => item.id === event.draggableId
+        )[0];
+        state.works[fromWorkIndex].items.splice(event.source.index, 1);
+        state.works[toListIndex].items.splice(
+          event.destination.index,
+          0,
+          dragItem
+        );
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchWorkList.fulfilled, (state, action) => {
@@ -84,5 +121,6 @@ export const {
   addNewItem,
   editItemName,
   removeItem,
+  dndAction,
 } = worksSlice.actions;
 export default worksSlice.reducer;

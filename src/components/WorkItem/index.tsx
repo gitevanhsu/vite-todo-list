@@ -5,7 +5,12 @@ import useOnClickOutside from "../../utils/useClickOutside";
 import { editItemName, removeItem } from "../../slice/workSlice";
 import InputHandler from "../../utils/inputHandler";
 
-export default function WorkItem({ workId, itemId, name }: WorkItemInterface) {
+export default function WorkItem({
+  itemDragProvided,
+  workId,
+  itemId,
+  name,
+}: WorkItemInterface) {
   const dispatch = useDispatch();
   const [isEditName, setIsEdit] = useState(false);
   const [value, setValue] = useState(name);
@@ -23,7 +28,12 @@ export default function WorkItem({ workId, itemId, name }: WorkItemInterface) {
   };
 
   return (
-    <div className="min-h-[50px] my-2 px-4 bg-amber-400 border-b-2 flex justify-between items-center rounded-[10px] text-xl group">
+    <div
+      ref={itemDragProvided.innerRef}
+      {...itemDragProvided.draggableProps}
+      {...itemDragProvided.dragHandleProps}
+      className="min-h-[50px] my-2 px-4 bg-amber-400 border-b-2 flex justify-between items-center rounded-[10px] text-xl group"
+    >
       <div
         ref={editRef}
         className="w-full overflow-x-auto no-scrollbar my-3 border-black/50 relative flex items-center cursor-pointer"

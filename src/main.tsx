@@ -79,13 +79,11 @@ function UserContext({ children }: { children: ReactElement }) {
 
 function App() {
   return (
-    <React.StrictMode>
-      <UserContext>
-        <Provider store={store}>
-          <RouterProvider router={router} />
-        </Provider>
-      </UserContext>
-    </React.StrictMode>
+    <UserContext>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </UserContext>
   );
 }
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

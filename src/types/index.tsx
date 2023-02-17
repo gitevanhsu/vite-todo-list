@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { DraggableProvided } from "react-beautiful-dnd";
 
 export interface MemberType {
   name: string;
@@ -109,11 +110,13 @@ export interface WorksItemInterface {
 }
 
 export interface WorkItemInterface {
+  itemDragProvided: DraggableProvided;
   workId: string;
   itemId: string;
   name: string;
 }
 export interface WorksInterface {
+  dragProvided: DraggableProvided;
   title: string;
   workId: string;
   items: WorksItemInterface[];
