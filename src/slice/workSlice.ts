@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
 import { initialState, getWork } from "../utils/firebaseFuns";
-import { WorksType } from "../types";
 
 export const fetchWorkList = createAsyncThunk("getWorks", getWork);
 
@@ -64,41 +64,41 @@ const worksSlice = createSlice({
     },
 
     dndAction: (state, action) => {
-      const { works, event } = action.payload;
-      if (!event.destination) return;
+      if (!action.payload.destination) return;
       state.isFirstRender = false;
-      if (event.type === "work" && event.destination.droppableId === "trash") {
-        state.works.splice(event.source.index, 1);
+      if (action.payload.type === "work" && action.payload.destination.droppableId === "trash") {
+        state.works.splice(action.payload.source.index, 1);
         return;
       }
-      if (event.type === "work") {
-        const fromIndex = event.source.index;
-        const toIndex = event.destination.index;
+      if (action.payload.type === "work") {
+        const fromIndex = action.payload.source.index;
+        const toIndex = action.payload.destination.index;
         [state.works[fromIndex], state.works[toIndex]] = [
           state.works[toIndex],
           state.works[fromIndex],
         ];
         return;
       }
-      if (event.type === "item") {
-        const fromWorkIndex = works.findIndex(
-          (item: WorksType) => item.id === event.source.droppableId
+      if (action.payload.type === "item") {
+        const fromWorkIndex = state.works.findIndex(
+          (item) => item.id === action.payload.source.droppableId
         );
-        const toListIndex = works.findIndex(
-          (item: WorksType) => item.id === event.destination.droppableId
+        const toListIndex = state.works.findIndex(
+          (item) => item.id === action.payload.destination.droppableId
         );
-        const dragItem = works[fromWorkIndex].items.filter(
-          (item: WorksType) => item.id === event.draggableId
+        const dragItem = state.works[fromWorkIndex].items.filter(
+          (item) => item.id === action.payload.draggableId
         )[0];
-        state.works[fromWorkIndex].items.splice(event.source.index, 1);
+        state.works[fromWorkIndex].items.splice(action.payload.source.index, 1);
         state.works[toListIndex].items.splice(
-          event.destination.index,
+          action.payload.destination.index,
           0,
           dragItem
         );
       }
     },
   },
+
   extraReducers: (builder) => {
     builder.addCase(fetchWorkList.fulfilled, (state, action) => {
       state.works = action.payload;
@@ -114,4 +114,5 @@ export const {
   removeItem,
   dndAction,
 } = worksSlice.actions;
+
 export default worksSlice.reducer;

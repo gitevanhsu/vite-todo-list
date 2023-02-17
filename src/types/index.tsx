@@ -55,10 +55,6 @@ export interface MemberSignUpInfo extends MemberSignInInfo {
   photo: File[];
 }
 
-export interface MemberInfoType extends MemberSignUpInfo {
-  uid: string;
-}
-
 export interface SignOutType {
   clickHandler: () => void;
 }
@@ -104,7 +100,7 @@ export interface MemberWorks {
   todoList: TodoProps[];
 }
 
-export interface WorksItemInterface {
+interface WorksItemInterface {
   id: string;
   name: string;
 }
@@ -122,14 +118,20 @@ export interface WorksInterface {
   items: WorksItemInterface[];
 }
 
-export interface StoreInterface {
+export interface StoreType {
   works: WorksType[];
   fetchStatus: string;
   isFirstRender: boolean;
 }
 
-export interface StoreType {
-  works: WorksType[];
-  fetchStatus: string;
-  isFirstRender: boolean;
+export interface EditModalProps {
+  url: string;
+  name: string;
+  clickHandler: () => void;
+}
+
+export interface ProfileModalProps {
+  url: string;
+  name: string;
+  handleCloseModal: (e: React.SyntheticEvent<HTMLDivElement>) => void;
 }

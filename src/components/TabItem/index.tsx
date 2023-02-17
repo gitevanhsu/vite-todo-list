@@ -1,11 +1,6 @@
 import { TabItemProps } from "../../types";
 
-export default function TabItem({
-  tabItem,
-  currentTab,
-  index,
-  setTab,
-}: TabItemProps) {
+export default function TabItem({ tabItem, currentTab, index, setTab }: TabItemProps) {
   return (
     <li
       aria-hidden="true"

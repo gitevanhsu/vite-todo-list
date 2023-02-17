@@ -1,30 +1,10 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
-
 import Swal from "sweetalert2";
 
-import {
-  MemberSignInInfo,
-  MemberSignUpInfo,
-  MemberWorks,
-  TodoProps,
-  MemberType,
-  WorksType,
-  StoreType,
-} from "../types";
+import { MemberSignInInfo, MemberSignUpInfo, MemberWorks, TodoProps, MemberType, WorksType, StoreType } from "../types";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -35,18 +15,18 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const storageImageRef = ref(storage, "image");
+export const auth = getAuth();
 
 export const initialState: StoreType = {
   works: [],
   fetchStatus: "idle",
   isFirstRender: true,
 };
-
-export const auth = getAuth();
 
 const uploadImage = async (id: string, file: File | undefined) => {
   if (!file) return "";
@@ -66,24 +46,11 @@ export const emailSignUp = async (
       title: "資料處理中......",
       didOpen: async () => {
         Swal.showLoading();
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const { uid } = userCredential.user;
         const url = await uploadImage(uid, photo[0]);
-        await setDoc(doc(db, "works", uid), {
-          todoList: [],
-          workList: initialState.works,
-        });
-        await setDoc(doc(db, "members", uid), {
-          name,
-          email,
-          password,
-          uid,
-          url,
-        });
+        await setDoc(doc(db, "works", uid), { todoList: [], workList: initialState.works });
+        await setDoc(doc(db, "members", uid), { name, email, password, uid, url });
         setMember({ name, uid, url, isSign: true });
         Swal.close();
       },
@@ -117,8 +84,7 @@ export const emailSignIn = async ({ email, password }: MemberSignInInfo) => {
       timer: 2000,
     });
   } catch (error) {
-    const errorMessage = (error as Error).message;
-    switch (errorMessage) {
+    switch ((error as Error).message) {
       case "Firebase: Error (auth/wrong-password).":
         Swal.fire({
           position: "center",
@@ -178,9 +144,7 @@ export const getWork = async (uid: string) => {
 };
 
 export const syncWork = async (uid: string, data: WorksType[]) => {
-  await updateDoc(doc(db, "works", uid), {
-    workList: data,
-  });
+  await updateDoc(doc(db, "works", uid), { workList: data });
 };
 
 export const upDateMemberTodoList = async (
@@ -220,10 +184,7 @@ export const updateMemberInfo = async (
       didOpen: async () => {
         Swal.showLoading();
         const url = await uploadImage(member.uid, fileList[0]);
-        await updateDoc(doc(db, "members", member.uid), {
-          name,
-          url,
-        });
+        await updateDoc(doc(db, "members", member.uid), { name, url });
         setMember((m) => ({ ...m, name, url }));
         Swal.close();
       },
@@ -238,15 +199,14 @@ export const updateMemberInfo = async (
     });
     return;
   }
+
   if (name !== member.name) {
     Swal.fire({
       icon: "info",
       title: "資料處理中......",
       didOpen: async () => {
         Swal.showLoading();
-        await updateDoc(doc(db, "members", member.uid), {
-          name,
-        });
+        await updateDoc(doc(db, "members", member.uid), { name });
         setMember((m) => ({ ...m, name }));
         Swal.close();
       },

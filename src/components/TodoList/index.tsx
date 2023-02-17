@@ -1,12 +1,7 @@
-import { TodoListProps } from "../../types";
 import TodoItem from "../TodoItem";
+import { TodoListProps } from "../../types";
 
-export default function TodoList({
-  tab,
-  todoList,
-  triggerCompleted,
-  removeItem,
-}: TodoListProps) {
+export default function TodoList({ tab, todoList, triggerCompleted, removeItem }: TodoListProps) {
   let newTodoList = [];
   if (tab === 1) {
     newTodoList = todoList.filter((item) => !item.completed);
