@@ -77,6 +77,7 @@ const worksSlice = createSlice({
       state.isFirstRender = false;
       if (event.type === "work" && event.destination.droppableId === "trash") {
         state.works.splice(event.source.index, 1);
+        return;
       }
       if (event.type === "work") {
         const fromIndex = event.source.index;
@@ -85,6 +86,7 @@ const worksSlice = createSlice({
           state.works[toIndex],
           state.works[fromIndex],
         ];
+        return;
       }
       if (event.type === "item") {
         const fromWorkIndex = works.findIndex(

@@ -64,7 +64,7 @@ export default function WorkPage() {
       setIsAdding(false);
     }
   };
-
+  console.log(works);
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-todo-bg flex flex-col justify-center">
       {member.isSign && <Header />}
@@ -90,7 +90,7 @@ export default function WorkPage() {
                   {...provided.droppableProps}
                   className="p-5 flex"
                 >
-                  {works &&
+                  {works.length > 0 &&
                     works.map((work, index) => (
                       <Draggable
                         key={work.id}
