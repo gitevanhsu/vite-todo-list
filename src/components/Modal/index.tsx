@@ -1,16 +1,9 @@
 import { useState } from "react";
 
 import EditModal from "./EditProfile";
+import { ProfileModalProps } from "../../types";
 
-export default function Modal({
-  url,
-  name,
-  handleCloseModal,
-}: {
-  url: string;
-  name: string;
-  handleCloseModal: (e: React.SyntheticEvent<HTMLDivElement>) => void;
-}) {
+export default function Modal({ url, name, handleCloseModal }: ProfileModalProps) {
   const [isEdit, setIsEdit] = useState(false);
   const clickHandler = () => setIsEdit((e) => !e);
 

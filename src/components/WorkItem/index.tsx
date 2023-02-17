@@ -2,21 +2,17 @@ import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
-import { WorkItemInterface } from "../../types";
 import useOnClickOutside from "../../utils/useClickOutside";
-import { editItemName, removeItem } from "../../slice/workSlice";
 import InputHandler from "../../utils/inputHandler";
+import { editItemName, removeItem } from "../../slice/workSlice";
+import { WorkItemInterface } from "../../types";
 
-export default function WorkItem({
-  itemDragProvided,
-  workId,
-  itemId,
-  name,
-}: WorkItemInterface) {
+export default function WorkItem({ itemDragProvided, workId, itemId, name }: WorkItemInterface) {
   const dispatch = useDispatch();
   const [isEditName, setIsEdit] = useState(false);
   const [value, setValue] = useState(name);
   const editRef = useRef<HTMLDivElement>(null);
+
   useOnClickOutside(editRef, () => {
     setIsEdit(false);
     setValue(name);

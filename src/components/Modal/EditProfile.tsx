@@ -1,18 +1,11 @@
 import { useContext, useRef, useState } from "react";
 
-import save from "/save.png";
 import memberInfo from "../../context/userContext";
 import { updateMemberInfo } from "../../utils/firebaseFuns";
+import { EditModalProps } from "../../types";
+import save from "/save.png";
 
-export default function EditModal({
-  url,
-  name,
-  clickHandler,
-}: {
-  url: string;
-  name: string;
-  clickHandler: () => void;
-}) {
+export default function EditModal({ url, name, clickHandler }: EditModalProps) {
   const { member, setMember } = useContext(memberInfo);
 
   const [value, setValue] = useState(name);

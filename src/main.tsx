@@ -1,12 +1,9 @@
-import React, { ReactElement, useEffect, useMemo, useState } from "react";
+import { ReactElement, useEffect, useMemo, useState } from "react";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-} from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
+
 import { Provider } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
 
 import "./index.css";
 import HomePage from "./pages/Home";
@@ -65,9 +62,7 @@ function UserContext({ children }: { children: ReactElement }) {
       }
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const memberInfoValue = useMemo(() => ({ member, setMember }), [member]);

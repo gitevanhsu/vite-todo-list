@@ -1,10 +1,11 @@
-import { createPortal } from "react-dom";
 import { useContext, useState } from "react";
-import memberInfo from "../../context/userContext";
-import Logo from "../Logo";
-import SignOutButton from "../SignOutButton";
+import { createPortal } from "react-dom";
+
 import { memberSignOut } from "../../utils/firebaseFuns";
+import memberInfo from "../../context/userContext";
+import SignOutButton from "../SignOutButton";
 import Modal from "../Modal";
+import Logo from "../Logo";
 
 const modalNode = document.querySelector("#modal");
 
@@ -45,16 +46,14 @@ export default function Header() {
         </div>
         <SignOutButton clickHandler={onSignOut} />
       </div>
-      {showModal &&
-        modalNode &&
-        createPortal(
-          <Modal
-            handleCloseModal={handleCloseModal}
-            url={member.url}
-            name={member.name}
-          />,
-          modalNode
-        )}
+      {showModal && modalNode && createPortal(
+        <Modal
+          handleCloseModal={handleCloseModal}
+          url={member.url}
+          name={member.name}
+        />,
+        modalNode
+      )}
     </header>
   );
 }

@@ -1,4 +1,5 @@
 import { DroppableProvided } from "react-beautiful-dnd";
+
 import trashCan from "/trash-can.png";
 
 export default function TrashBox({

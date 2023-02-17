@@ -1,38 +1,31 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DraggableProvided,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DraggableProvided } from "react-beautiful-dnd";
 import Swal from "sweetalert2";
 
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import UserInfo from "../../context/userContext";
-
 import RouterButton from "../../components/RouterButton";
-import useOnClickOutside from "../../utils/useClickOutside";
-import Work from "../../components/Works";
-import InputHandler from "../../utils/inputHandler";
-import { addNewWork, fetchWorkList, dndAction } from "../../slice/workSlice";
-import { AppDispatch, RootState } from "../../store";
-import { syncWork } from "../../utils/firebaseFuns";
 import TrashBox from "../../components/TrashBox";
+import Work from "../../components/Works";
+import UserInfo from "../../context/userContext";
+import { AppDispatch, RootState } from "../../store";
+import { addNewWork, fetchWorkList, dndAction } from "../../slice/workSlice";
+import useOnClickOutside from "../../utils/useClickOutside";
+import InputHandler from "../../utils/inputHandler";
+import { syncWork } from "../../utils/firebaseFuns";
 
 let FirstRender = true;
 
 export default function WorkPage() {
   const { member } = useContext(UserInfo);
-  const { works, fetchStatus, isFirstRender } = useSelector(
-    (state: RootState) => state
-  );
+  const { works, fetchStatus, isFirstRender } = useSelector((state: RootState) => state);
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const addRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (fetchStatus === "idle") {
       dispatch(fetchWorkList(member.uid));
@@ -46,7 +39,7 @@ export default function WorkPage() {
     }
     if (isFirstRender) return;
     syncWork(member.uid, works);
-  }, [dispatch, isFirstRender, member.uid, works]);
+  }, [isFirstRender, member.uid, works]);
 
   useOnClickOutside(addRef, () => {
     setIsAdding(false);
@@ -78,10 +71,7 @@ export default function WorkPage() {
         <div className="w-[90%] h-[500px] my-home-bg border-4 text-center rounded-[10px] py-3 text-3xl overflow-auto no-scrollbar relative">
           <DragDropContext
             onDragEnd={(event) => {
-              if (
-                event.type === "work" &&
-                event?.destination?.droppableId === "trash"
-              ) {
+              if (event.type === "work" && event?.destination?.droppableId === "trash") {
                 Swal.fire({
                   title: "確定要刪除工作區域嗎？",
                   icon: "warning",
@@ -92,21 +82,18 @@ export default function WorkPage() {
                   cancelButtonText: "取消",
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    dispatch(dndAction({ works, event }));
+                    dispatch(dndAction(event));
                     setIsDragging(false);
                   }
                 });
-              } else {
-                dispatch(dndAction({ works, event }));
-                setIsDragging(false);
               }
+              dispatch(dndAction(event));
+              setIsDragging(false);
             }}
             onDragStart={() => setIsDragging(true)}
           >
             <Droppable droppableId="trash" direction="horizontal" type="work">
-              {(provided) => (
-                <TrashBox isDragging={isDragging} dropProvided={provided} />
-              )}
+              {(provided) => (<TrashBox isDragging={isDragging} dropProvided={provided} />)}
             </Droppable>
             <Droppable droppableId="works" direction="horizontal" type="work">
               {(provided) => (
@@ -115,23 +102,22 @@ export default function WorkPage() {
                   {...provided.droppableProps}
                   className="p-5 flex"
                 >
-                  {works.length > 0 &&
-                    works.map((work, index) => (
-                      <Draggable
-                        key={work.id}
-                        draggableId={work.id}
-                        index={index}
-                      >
-                        {(dragProvided: DraggableProvided) => (
-                          <Work
-                            dragProvided={dragProvided}
-                            workId={work.id}
-                            title={work.title}
-                            items={work.items}
-                          />
-                        )}
-                      </Draggable>
-                    ))}
+                  {works.length > 0 && works.map((work, index) => (
+                    <Draggable
+                      key={work.id}
+                      draggableId={work.id}
+                      index={index}
+                    >
+                      {(dragProvided: DraggableProvided) => (
+                        <Work
+                          dragProvided={dragProvided}
+                          workId={work.id}
+                          title={work.title}
+                          items={work.items}
+                        />
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                   <div
                     className="w-[250px] h-[100px] mr-4 py-2 bg-black/30 rounded-[10px] relative flex justify-center items-center cursor-pointer shrink-0 hover:bg-black/40 hover:scale-110 transition-transform"

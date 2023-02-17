@@ -2,19 +2,14 @@ import { useDispatch } from "react-redux";
 import { useState, useRef } from "react";
 import { Droppable, Draggable, DraggableProvided } from "react-beautiful-dnd";
 import Swal from "sweetalert2";
+
+import WorkItem from "../WorkItem";
+import { editWorkTitle, addNewItem } from "../../slice/workSlice";
+import useOnClickOutside from "../../utils/useClickOutside";
+import InputHandler from "../../utils/inputHandler";
 import { WorksInterface } from "../../types";
 
-import useOnClickOutside from "../../utils/useClickOutside";
-import WorkItem from "../WorkItem";
-import InputHandler from "../../utils/inputHandler";
-import { editWorkTitle, addNewItem } from "../../slice/workSlice";
-
-export default function Work({
-  dragProvided,
-  workId,
-  title,
-  items,
-}: WorksInterface) {
+export default function Work({ dragProvided, workId, title, items }: WorksInterface) {
   const dispatch = useDispatch();
   const [isAdding, setIsAdding] = useState(false);
   const [isEditTitle, setIsEditTitle] = useState(false);
@@ -101,18 +96,17 @@ export default function Work({
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {items &&
-              items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(itemDragProvided: DraggableProvided) => (
-                    <WorkItem
-                      itemDragProvided={itemDragProvided}
-                      workId={workId}
-                      itemId={item.id}
-                      name={item.name}
-                    />
-                  )}
-                </Draggable>
+            {items && items.map((item, index) => (
+              <Draggable key={item.id} draggableId={item.id} index={index}>
+                {(itemDragProvided: DraggableProvided) => (
+                  <WorkItem
+                    itemDragProvided={itemDragProvided}
+                    workId={workId}
+                    itemId={item.id}
+                    name={item.name}
+                  />
+                )}
+              </Draggable>
               ))}
             {provided.placeholder}
             <div
