@@ -91,10 +91,10 @@ export interface TodoItemProps {
 }
 
 export interface WorksType {
-  id: `${string}-${string}-${string}-${string}-${string}`;
+  id: string;
   title: string;
   items: {
-    id: `${string}-${string}-${string}-${string}-${string}`;
+    id: string;
     name: string;
   }[];
 }
@@ -123,6 +123,12 @@ export interface WorksInterface {
 }
 
 export interface StoreInterface {
+  works: WorksType[];
+  fetchStatus: string;
+  isFirstRender: boolean;
+}
+
+export interface StoreType {
   works: WorksType[];
   fetchStatus: string;
   isFirstRender: boolean;

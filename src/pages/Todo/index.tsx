@@ -1,4 +1,6 @@
 import { useContext, useEffect, useState } from "react";
+import Swal from "sweetalert2";
+
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import UserInfo from "../../context/userContext";
@@ -27,7 +29,12 @@ export default function TodoPage() {
   const addTodoKeyBoard = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (inputValue.trim() === "") {
-        alert("尚未輸入內容");
+        Swal.fire({
+          icon: "info",
+          title: "請勿輸入空白。",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         return;
       }
       const newTodoList = [
@@ -42,7 +49,12 @@ export default function TodoPage() {
 
   const addTodoKeyMouse = () => {
     if (inputValue.trim() === "") {
-      alert("尚未輸入內容");
+      Swal.fire({
+        icon: "info",
+        title: "請勿輸入空白。",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       return;
     }
     const newTodoList = [

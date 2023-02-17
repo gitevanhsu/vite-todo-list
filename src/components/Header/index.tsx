@@ -12,13 +12,9 @@ export default function Header() {
   const { member, setMember } = useContext(memberInfo);
   const [showModal, setShowModal] = useState(false);
 
-  const onSignOut = () => {
-    memberSignOut();
-    setMember({ name: "", uid: "", url: "", isSign: false });
-  };
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
+  const onSignOut = () => memberSignOut(setMember);
+  const handleOpenModal = () => setShowModal(true);
+
   const handleCloseModal = (e: React.SyntheticEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) setShowModal(false);
   };
