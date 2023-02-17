@@ -127,3 +127,9 @@ export interface StoreInterface {
   fetchStatus: string;
   isFirstRender: boolean;
 }
+
+export interface StoreType {
+  works: WorksType[];
+  fetchStatus: string;
+  isFirstRender: boolean;
+}

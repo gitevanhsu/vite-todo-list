@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { initialState, getWork, syncWork } from "../utils/firebaseFuns";
+import { initialState, getWork } from "../utils/firebaseFuns";
 import { WorksType } from "../types";
 
 export const fetchWorkList = createAsyncThunk("getWorks", getWork);
@@ -23,14 +23,6 @@ const worksSlice = createSlice({
           work.title = action.payload.title;
         }
       });
-      state.isFirstRender = false;
-    },
-
-    removeWork: (state, action) => {
-      const index = state.works.findIndex(
-        (work) => work.id === action.payload.workId
-      );
-      state.works.splice(index, 1);
       state.isFirstRender = false;
     },
 
@@ -117,7 +109,6 @@ const worksSlice = createSlice({
 export const {
   addNewWork,
   editWorkTitle,
-  removeWork,
   addNewItem,
   editItemName,
   removeItem,

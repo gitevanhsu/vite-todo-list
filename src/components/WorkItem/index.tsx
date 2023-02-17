@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+
 import { WorkItemInterface } from "../../types";
 import useOnClickOutside from "../../utils/useClickOutside";
 import { editItemName, removeItem } from "../../slice/workSlice";
@@ -57,7 +59,21 @@ export default function WorkItem({
         className="h-[30px] w-[30px] ml-1 shrink-0 bg-red-500 flex justify-center items-center rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         role="button"
         tabIndex={0}
-        onClick={() => dispatch(removeItem({ workId, itemId }))}
+        onClick={() => {
+          Swal.fire({
+            title: "確定要刪除項目嗎？",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "確定刪除",
+            cancelButtonText: "取消",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              dispatch(removeItem({ workId, itemId }));
+            }
+          });
+        }}
         onKeyDown={(e) => {
           if (e.key !== "Enter") return;
           dispatch(removeItem({ workId, itemId }));

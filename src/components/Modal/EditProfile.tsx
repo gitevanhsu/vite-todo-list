@@ -33,8 +33,7 @@ export default function EditModal({
 
   const updateHandler = async () => {
     if (!fileRef.current) return;
-    updateMemberInfo(member, fileRef.current, value, setMember);
-    clickHandler();
+    updateMemberInfo(member, fileRef.current, value, setMember, clickHandler);
   };
 
   return (

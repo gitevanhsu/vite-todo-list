@@ -1,7 +1,9 @@
 import { useDispatch } from "react-redux";
 import { useState, useRef } from "react";
 import { Droppable, Draggable, DraggableProvided } from "react-beautiful-dnd";
+import Swal from "sweetalert2";
 import { WorksInterface } from "../../types";
+
 import useOnClickOutside from "../../utils/useClickOutside";
 import WorkItem from "../WorkItem";
 import InputHandler from "../../utils/inputHandler";
@@ -33,7 +35,12 @@ export default function Work({
   const addItem = (e: React.KeyboardEvent) => {
     if (e.code === "Enter") {
       if (!itemValue.trim()) {
-        alert("請勿留空");
+        Swal.fire({
+          icon: "info",
+          title: "請勿輸入空白。",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         return;
       }
       dispatch(addNewItem({ workId, name: itemValue }));
@@ -45,7 +52,12 @@ export default function Work({
   const editTitle = (e: React.KeyboardEvent) => {
     if (e.code === "Enter") {
       if (!titleValue.trim()) {
-        alert("請勿留空");
+        Swal.fire({
+          icon: "info",
+          title: "請勿輸入空白。",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         return;
       }
       dispatch(editWorkTitle({ workId, title: titleValue }));

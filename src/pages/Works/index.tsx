@@ -6,6 +6,7 @@ import {
   Draggable,
   DraggableProvided,
 } from "react-beautiful-dnd";
+import Swal from "sweetalert2";
 
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
@@ -15,9 +16,8 @@ import RouterButton from "../../components/RouterButton";
 import useOnClickOutside from "../../utils/useClickOutside";
 import Work from "../../components/Works";
 import InputHandler from "../../utils/inputHandler";
-import { StoreInterface } from "../../types";
 import { addNewWork, fetchWorkList, dndAction } from "../../slice/workSlice";
-import { AppDispatch } from "../../store";
+import { AppDispatch, RootState } from "../../store";
 import { syncWork } from "../../utils/firebaseFuns";
 import TrashBox from "../../components/TrashBox";
 
@@ -26,8 +26,8 @@ let FirstRender = true;
 export default function WorkPage() {
   const { member } = useContext(UserInfo);
   const { works, fetchStatus, isFirstRender } = useSelector(
-    (state) => state
-  ) as StoreInterface;
+    (state: RootState) => state
+  );
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
   const [isAdding, setIsAdding] = useState(false);
@@ -56,7 +56,12 @@ export default function WorkPage() {
   const onKeyDownHandler = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       if (!value.trim()) {
-        alert("請勿留空");
+        Swal.fire({
+          icon: "info",
+          title: "請勿輸入空白。",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         return;
       }
       dispatch(addNewWork({ title: value }));
@@ -64,7 +69,7 @@ export default function WorkPage() {
       setIsAdding(false);
     }
   };
-  console.log(works);
+
   return (
     <div className="relative min-h-screen pt-[50px] pb-[20px] my-todo-bg flex flex-col justify-center">
       {member.isSign && <Header />}
@@ -73,8 +78,28 @@ export default function WorkPage() {
         <div className="w-[90%] h-[500px] my-home-bg border-4 text-center rounded-[10px] py-3 text-3xl overflow-auto no-scrollbar relative">
           <DragDropContext
             onDragEnd={(event) => {
-              dispatch(dndAction({ works, event }));
-              setIsDragging(false);
+              if (
+                event.type === "work" &&
+                event?.destination?.droppableId === "trash"
+              ) {
+                Swal.fire({
+                  title: "確定要刪除工作區域嗎？",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "確定刪除",
+                  cancelButtonText: "取消",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    dispatch(dndAction({ works, event }));
+                    setIsDragging(false);
+                  }
+                });
+              } else {
+                dispatch(dndAction({ works, event }));
+                setIsDragging(false);
+              }
             }}
             onDragStart={() => setIsDragging(true)}
           >
