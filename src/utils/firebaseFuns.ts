@@ -50,7 +50,7 @@ export const emailSignUp = async (
         const { uid } = userCredential.user;
         const url = await uploadImage(uid, photo[0]);
         await setDoc(doc(db, "works", uid), { todoList: [], workList: initialState.works });
-        await setDoc(doc(db, "members", uid), { name, email, password, uid, url });
+        await setDoc(doc(db, "members", uid), { name, email, uid, url });
         setMember({ name, uid, url, isSign: true });
         Swal.close();
       },

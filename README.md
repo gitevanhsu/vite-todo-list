@@ -1,8 +1,8 @@
-# **My Manage**
+# **My Manager**
 
-"My Manage" is a todo list and task management web application created using React.js, TailwindCSS, and TypeScript. It uses Vite to package the whole project and React Router for web app routing. User authentication is handled by Firebase Auth, with form control provided by the react-hook-form library.
+"My Manager" is a todo list and task management web application created using React.js, TailwindCSS, and TypeScript. It uses Vite to package the whole project and React Router for web app routing. User authentication is handled by Firebase Auth, with form control provided by the react-hook-form library.
 
-**[My Manage](https://gitevanhsu.github.io/vite-todo-list/)**
+**[My Manager](https://gitevanhsu.github.io/vite-todo-list/)**
 
 ## **Test Account**
 
@@ -29,14 +29,24 @@
 ### **Page Snapshots and Video**
 
 - Sign in Page
+
   ![sign In](https://i.imgur.com/oWdTwa2.png)
+
 - Sign up Page (with input content verify)
+
   ![sign Up](https://i.imgur.com/zWxFk06.png)
+
 - Todo Page
+
+  https://user-images.githubusercontent.com/92194495/219850927-b9063da1-558f-4070-bb69-0c82fd322ee3.mov
 
 - Tasks Page
 
+  https://user-images.githubusercontent.com/92194495/219851772-ee57dbb4-21b7-402d-9678-f6a8bda76dab.mp4
+
 - Edit profile
+
+  https://user-images.githubusercontent.com/92194495/219851207-418fb9bd-ec43-40d5-984a-4f5fc2ca355e.mov
 
 ## Author
 
