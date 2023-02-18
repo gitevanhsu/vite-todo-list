@@ -73,10 +73,8 @@ const worksSlice = createSlice({
       if (action.payload.type === "work") {
         const fromIndex = action.payload.source.index;
         const toIndex = action.payload.destination.index;
-        [state.works[fromIndex], state.works[toIndex]] = [
-          state.works[toIndex],
-          state.works[fromIndex],
-        ];
+        const dragItem = state.works.splice(fromIndex, 1)[0];
+        state.works.splice(toIndex, 0, dragItem);
         return;
       }
       if (action.payload.type === "item") {
